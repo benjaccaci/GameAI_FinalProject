@@ -143,6 +143,10 @@ void Start()
         {
             Debug.Log("Hit: " + hit.collider.gameObject.name);
             endPoint = hit.point;
+
+                ZombieController zombie = hit.collider.GetComponent<ZombieController>();
+                if (zombie != null)
+                    zombie.TakeDamage(damage);
         }
 
         DrawTrail(ray.origin, endPoint);
@@ -150,14 +154,15 @@ void Start()
 
     void DrawTrail(Vector3 start, Vector3 end)
     {
-        GameObject trail = new GameObject("BulletTrail");
-        LineRenderer lr = trail.AddComponent<LineRenderer>();
-        lr.startWidth = 0.01f;
-        lr.endWidth = 0.01f;
-        lr.positionCount = 2;
-        lr.SetPosition(0, start);
-        lr.SetPosition(1, end);
-        lr.material = new Material(Shader.Find("Unlit/Color"));
-        lr.material.color = Color.red;
+
+        // GameObject trail = new GameObject("BulletTrail");
+        // LineRenderer lr = trail.AddComponent<LineRenderer>();
+        // lr.startWidth = 0.01f;
+        // lr.endWidth = 0.01f;
+        // lr.positionCount = 2;
+        // lr.SetPosition(0, start);
+        // lr.SetPosition(1, end);
+        // lr.material = new Material(Shader.Find("Unlit/Color"));
+        // lr.material.color = Color.red;
     }
 }
