@@ -21,11 +21,10 @@ public class MouseLook : MonoBehaviour
         float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
 
         xRotation -= mouseY;
-
-        // Smoothly apply recoil
         if (recoilVertical > 0f)
         {
-            float verticalStep = recoilVertical * recoilSmoothSpeed * Time.deltaTime;
+            float verticalStep = Mathf.Max(recoilVertical * recoilSmoothSpeed * Time.deltaTime, 0.5f * Time.deltaTime);
+            if (verticalStep > recoilVertical) verticalStep = recoilVertical;
             xRotation -= verticalStep;
             recoilVertical -= verticalStep;
 
@@ -35,14 +34,15 @@ public class MouseLook : MonoBehaviour
 
         if (Mathf.Abs(recoilHorizontal) > 0f)
         {
-            float horizontalStep = recoilHorizontal * recoilSmoothSpeed * Time.deltaTime;
-            mouseX += horizontalStep;
-            recoilHorizontal -= horizontalStep;
+            float horizontalStep = Mathf.Max(Mathf.Abs(recoilHorizontal) * recoilSmoothSpeed * Time.deltaTime, 0.5f * Time.deltaTime);
+            if (horizontalStep > Mathf.Abs(recoilHorizontal)) horizontalStep = Mathf.Abs(recoilHorizontal);
+            float sign = Mathf.Sign(recoilHorizontal);
+            transform.Rotate(Vector3.up * sign * horizontalStep);
+            recoilHorizontal -= sign * horizontalStep;
 
             if (Mathf.Abs(recoilHorizontal) < 0.01f)
                 recoilHorizontal = 0f;
         }
-
         xRotation = Mathf.Clamp(xRotation, -90f, 90f);
 
         cameraHolder.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
