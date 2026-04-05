@@ -5034,19 +5034,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7cdf381d8925594c866cc86a34ba982, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  recoilAmount: 30
-  recoilSpeed: 20
-  returnSpeed: 10
-  gunShotSound: {fileID: 318591181637044394}
+  ammoCountUI: {fileID: 0}
+  isFullAuto: 0
+  isShotgun: 0
   fireRate: 0.3
   range: 100
   damage: 25
   playerCamera: {fileID: 0}
-  muzzleFlash: {fileID: 1133301677895892601}
+  magSize: 30
+  reserveAmmo: 90
+  reloadSound: {fileID: 0}
+  pelletCount: 8
+  shotgunSpread: 0.1
+  recoilAmount: 30
+  returnSpeed: 10
+  useCameraRecoil: 0
+  cameraRecoilUp: 0.4
+  cameraRecoilSide: 0.3
+  recoilPattern:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  hipFireSpread: 0.05
   hipFirePoint: {fileID: 2763704461719833778}
   adsPoint: {fileID: 4260096529109224306}
   adsSpeed: 15
-  hipFireSpread: 0.05
+  reloadPoint: {fileID: 0}
+  reloadTransitionSpeed: 15
+  gunShotSound: {fileID: 0}
+  muzzleFlash: {fileID: 0}
 --- !u!82 &318591181637044394
 AudioSource:
   m_ObjectHideFlags: 0

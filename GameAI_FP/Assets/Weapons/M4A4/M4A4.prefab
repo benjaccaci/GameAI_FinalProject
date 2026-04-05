@@ -463,6 +463,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7cdf381d8925594c866cc86a34ba982, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunScript
+  ammoCountUI: {fileID: 0}
   isFullAuto: 1
   isShotgun: 0
   fireRate: 0.13
@@ -545,7 +546,7 @@ MonoBehaviour:
   adsSpeed: 10
   reloadPoint: {fileID: 7936244766906580582}
   reloadTransitionSpeed: 15
-  gunShotSound: {fileID: 3794004413654790188}
+  gunShotSound: {fileID: 0}
   muzzleFlash: {fileID: 8403948940191526253}
 --- !u!82 &3794004413654790188
 AudioSource:

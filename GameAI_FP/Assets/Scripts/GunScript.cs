@@ -1,8 +1,12 @@
 using UnityEngine;
 using System.Collections;
+using TMPro;
 
 public class GunScript : MonoBehaviour
 {
+    [Header("UI")]
+    public TMP_Text ammoCountUI;
+
     [Header("Gun Type")]
     public bool isFullAuto = false;
     public bool isShotgun = false;
@@ -60,6 +64,7 @@ public class GunScript : MonoBehaviour
     {
         originalRotation = transform.localRotation;
         currentAmmo = magSize;
+        ammoCountUI.text = currentAmmo.ToString();
 
         if (playerCamera == null)
             playerCamera = Camera.main;
@@ -115,6 +120,7 @@ public class GunScript : MonoBehaviour
         {
             nextFireTime = Time.time + fireRate;
             currentAmmo--;
+            ammoCountUI.text = currentAmmo.ToString();
 
             Debug.Log("Ammo: " + currentAmmo + "/" + magSize + " | Reserve: " + reserveAmmo);
 
@@ -187,6 +193,7 @@ public class GunScript : MonoBehaviour
 
         currentAmmo += ammoToReload;
         reserveAmmo -= ammoToReload;
+        ammoCountUI.text = currentAmmo.ToString();
 
         Debug.Log("Reloaded! Ammo: " + currentAmmo + "/" + magSize + " | Reserve: " + reserveAmmo);
         isReloading = false;
