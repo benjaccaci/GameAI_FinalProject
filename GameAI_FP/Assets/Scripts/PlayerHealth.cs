@@ -5,6 +5,8 @@ public class PlayerHealth : MonoBehaviour
 {
     public float playerHealth;
     public Slider healthSlider;
+    public Image bloodSplatterEffect;
+    public Color bloodSplatterColor;
     int maxHealth = 100;
     private LevelManager levelManager;
 
@@ -27,6 +29,10 @@ public class PlayerHealth : MonoBehaviour
             Die();
         }
         UpdateSlider();
+
+        bloodSplatterEffect.CrossFadeAlpha(1f, 0f, false);
+        bloodSplatterEffect.color = bloodSplatterColor;
+        bloodSplatterEffect.CrossFadeAlpha(0f, 0.3f, false);
     }
 
     public void AddHealth(int health) {
