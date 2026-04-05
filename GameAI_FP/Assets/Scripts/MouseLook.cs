@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class MouseLook : MonoBehaviour
 {
@@ -9,18 +10,25 @@ public class MouseLook : MonoBehaviour
     private float xRotation = 0f;
     private float recoilVertical = 0f;
     private float recoilHorizontal = 0f;
+    private Vector2 lookInput;
 
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
     }
 
+    public void OnLook(InputValue value)
+    {
+        lookInput = value.Get<Vector2>();
+    }
+
     void Update()
     {
-        float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
-        float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
+        float mouseX = lookInput.x * mouseSensitivity * Time.deltaTime;
+        float mouseY = lookInput.y * mouseSensitivity * Time.deltaTime;
 
         xRotation -= mouseY;
+
         if (recoilVertical > 0f)
         {
             float verticalStep = Mathf.Max(recoilVertical * recoilSmoothSpeed * Time.deltaTime, 0.5f * Time.deltaTime);
@@ -43,6 +51,7 @@ public class MouseLook : MonoBehaviour
             if (Mathf.Abs(recoilHorizontal) < 0.01f)
                 recoilHorizontal = 0f;
         }
+
         xRotation = Mathf.Clamp(xRotation, -90f, 90f);
 
         cameraHolder.localRotation = Quaternion.Euler(xRotation, 0f, 0f);

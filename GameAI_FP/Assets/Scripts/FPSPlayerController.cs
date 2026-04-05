@@ -35,9 +35,10 @@ public class FPSPlayerController : MonoBehaviour
     Vector3 input;
     Vector3 moveDirection;
     CharacterController controller;
+    private PlayerInput playerInput;
+    private InputAction sprintAction;
     private Vector2 moveInput;
     private bool jumpPressed;
-    private bool sprintHeld;
 
     void Start()
     {
@@ -46,6 +47,9 @@ public class FPSPlayerController : MonoBehaviour
         SFXaudioSource.playOnAwake = false;
         SFXaudioSource.loop = true;
         SFXaudioSource.clip = walkSFX;
+
+        playerInput = GetComponent<PlayerInput>();
+        sprintAction = playerInput.actions["Sprint"];
 
         originalSpeed = speed;
 
@@ -70,6 +74,7 @@ public class FPSPlayerController : MonoBehaviour
 
         UpdateSlider();
     }
+
     public void OnMove(InputValue value)
     {
         moveInput = value.Get<Vector2>();
@@ -77,16 +82,15 @@ public class FPSPlayerController : MonoBehaviour
 
     public void OnJump(InputValue value)
     {
-        jumpPressed = value.isPressed;
+        if (value.isPressed)
+            jumpPressed = true;
     }
 
-    public void OnSprint(InputValue value)
-    {
-        sprintHeld = value.isPressed;
-    }
 
     void Update()
     {
+        bool sprintPressed = sprintAction.IsPressed();
+
         input = transform.right * moveInput.x + transform.forward * moveInput.y;
         input.Normalize();
 
@@ -97,17 +101,19 @@ public class FPSPlayerController : MonoBehaviour
             if (jumpPressed)
             {
                 moveDirection.y = Mathf.Sqrt(jumpHeight * 2f * gravity);
+                jumpPressed = false; 
             }
             else
             {
-                moveDirection.y = 0f;
+                moveDirection.y = -.1f;
             }
 
-            if (sprintHeld && stamina > minimumSprintStamina && !isSprinting)
+            if (sprintPressed && stamina > minimumSprintStamina && !isSprinting)
             {
+                sprintPressed = false;
                 StartSprint();
             }
-            else if (!sprintHeld && isSprinting)
+            else if (!sprintPressed && isSprinting)
             {
                 StopSprint();
             }
@@ -120,7 +126,6 @@ public class FPSPlayerController : MonoBehaviour
 
         if (isSprinting)
         {
-            Debug.Log("Sprinting with stamina: " + stamina);
             ReduceStamina();
             if (stamina <= 0)
             {
@@ -137,8 +142,8 @@ public class FPSPlayerController : MonoBehaviour
 
         if (input.magnitude > 0 && !SFXaudioSource.isPlaying)
         {
-            SFXaudioSource.clip = walkSFX;
-            SFXaudioSource.volume = walkSFXVolume;
+            SFXaudioSource.clip = isSprinting ? sprintSFX : walkSFX;
+            SFXaudioSource.volume = isSprinting ? sprintSFXVolume : walkSFXVolume;
             SFXaudioSource.Play();
         }
         else if (input.magnitude == 0 && SFXaudioSource.isPlaying)
@@ -147,44 +152,30 @@ public class FPSPlayerController : MonoBehaviour
         }
     }
 
-    public void ApplyBounce(float bounceForce)
-    {
-        moveDirection.y = bounceForce;
-        controller.Move(speed * Time.deltaTime * moveDirection);
-    }
-
     void StartSprint()
     {
         if (isSprinting) return;
 
-        Debug.Log("Sprinting started");
         isSprinting = true;
         speed = sprintSpeed;
 
         if (SFXaudioSource.isPlaying) SFXaudioSource.Stop();
-        if (!SFXaudioSource.isPlaying)
-        {
-            SFXaudioSource.clip = sprintSFX;
-            SFXaudioSource.volume = sprintSFXVolume;
-            SFXaudioSource.Play();
-        }
+        SFXaudioSource.clip = sprintSFX;
+        SFXaudioSource.volume = sprintSFXVolume;
+        SFXaudioSource.Play();
     }
 
     void StopSprint()
     {
         if (!isSprinting) return;
 
-        Debug.Log("Sprinting stopped");
         isSprinting = false;
         speed = originalSpeed;
 
         if (SFXaudioSource.isPlaying) SFXaudioSource.Stop();
-        if (!SFXaudioSource.isPlaying)
-        {
-            SFXaudioSource.clip = walkSFX;
-            SFXaudioSource.volume = walkSFXVolume;
-            SFXaudioSource.Play();
-        }
+        SFXaudioSource.clip = walkSFX;
+        SFXaudioSource.volume = walkSFXVolume;
+        SFXaudioSource.Play();
     }
 
     void RegenerateStamina()
@@ -202,7 +193,6 @@ public class FPSPlayerController : MonoBehaviour
         if (stamina > 0f)
         {
             stamina -= sprintStaminaCost * Time.deltaTime;
-            Debug.Log("Stamina: " + stamina);
             if (stamina <= 0f) stamina = 0f;
         }
         UpdateSlider();
