@@ -6,6 +6,7 @@ public class PlayerHealth : MonoBehaviour
     public float playerHealth;
     public Slider healthSlider;
     int maxHealth = 100;
+    private LevelManager levelManager;
 
     void Start()
     {
@@ -14,6 +15,7 @@ public class PlayerHealth : MonoBehaviour
             playerHealth = 100;
         }
         UpdateSlider();
+        levelManager = FindFirstObjectByType<LevelManager>();
     }
 
     public void TakeDamage(float damage)
@@ -38,8 +40,8 @@ public class PlayerHealth : MonoBehaviour
     void Die()
     {
         Debug.Log("Player died");
-        Destroy(gameObject);
-        // LevelManager.instance.RestartLevel();
+        // Destroy(gameObject);
+        levelManager.DeathScreen();
     }
 
     void UpdateSlider() {
