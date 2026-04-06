@@ -4,10 +4,14 @@ public class LevelManager : MonoBehaviour
 {
     public GameObject inGameUIScreen;
     public GameObject deathScreen;
+    public AudioClip deathSFX;
+    private AudioSource sfxAudioSource;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        sfxAudioSource = GetComponent<AudioSource>();
+        sfxAudioSource.playOnAwake = false;
     }
 
     // Update is called once per frame
@@ -22,6 +26,10 @@ public class LevelManager : MonoBehaviour
         Cursor.lockState = CursorLockMode.None;
         inGameUIScreen.SetActive(false);
         deathScreen.SetActive(true);
+
+        sfxAudioSource.clip = deathSFX;
+        sfxAudioSource.volume = 1.0f;
+        sfxAudioSource.Play();
     }
 
     public void RestartLevel() {

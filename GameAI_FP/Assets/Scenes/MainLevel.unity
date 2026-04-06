@@ -11914,6 +11914,7 @@ MonoBehaviour:
   attackDamage: 20
   detectionRange: 15
   audioSource: {fileID: 602395403}
+  walkingSound: {fileID: 0}
   hitSounds:
   - {fileID: 8300000, guid: 71cce53943fce174680aa1cf1c102624, type: 3}
   - {fileID: 8300000, guid: 539a139932b45e34094ce10795c80b6b, type: 3}
@@ -13602,6 +13603,7 @@ MonoBehaviour:
   attackDamage: 20
   detectionRange: 15
   audioSource: {fileID: 724125197}
+  walkingSound: {fileID: 0}
   hitSounds:
   - {fileID: 8300000, guid: 71cce53943fce174680aa1cf1c102624, type: 3}
   - {fileID: 8300000, guid: 539a139932b45e34094ce10795c80b6b, type: 3}
@@ -33333,6 +33335,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1534393141}
   - component: {fileID: 1534393142}
+  - component: {fileID: 1534393143}
   m_Layer: 0
   m_Name: LevelManager
   m_TagString: Untagged
@@ -33369,6 +33372,104 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LevelManager
   inGameUIScreen: {fileID: 1684673013}
   deathScreen: {fileID: 1843002545}
+  deathSFX: {fileID: 8300000, guid: 3b4ce408800e34e60bc6a5667e5ccd9a, type: 3}
+--- !u!82 &1534393143
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1534393140}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!43 &1534987238
 Mesh:
   m_ObjectHideFlags: 0
@@ -46462,6 +46563,7 @@ MonoBehaviour:
   gunHolder: {fileID: 1097322552}
   pickupRange: 15
   pickupKey: 101
+  pickupSound: {fileID: 8300000, guid: e56b7623298c441d38e3709601fc8374, type: 3}
 --- !u!114 &2013126130
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -46478,6 +46580,8 @@ MonoBehaviour:
   healthSlider: {fileID: 160750842}
   bloodSplatterEffect: {fileID: 862370254}
   bloodSplatterColor: {r: 0.5283019, g: 0, b: 0, a: 0.5882353}
+  damageSFX: {fileID: 8300000, guid: d42e64927e4aa4d87b05460168953d38, type: 3}
+  maxHealth: 100
 --- !u!114 &2013126131
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -49110,6 +49214,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 6210134679334183204, guid: 0a78601ff3b4948779cc64f3a26f7799, type: 3}
+      propertyPath: walkingSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 05896eb110e4542aeb52d457f8752418, type: 3}
     - target: {fileID: 6996144551404341658, guid: 0a78601ff3b4948779cc64f3a26f7799, type: 3}
       propertyPath: m_LocalPosition.x
       value: -1.7935697

@@ -6,8 +6,16 @@ public class GunSwap : MonoBehaviour
     public Transform gunHolder;
     public float pickupRange = 3f;
     public KeyCode pickupKey = KeyCode.E;
+    public AudioClip pickupSound;
 
     private GameObject currentGun;
+    private AudioSource audioSource;
+
+    void Start()
+    {
+        audioSource = gameObject.AddComponent<AudioSource>();
+        audioSource.playOnAwake = false;
+    }
 
     void Update()
     {
@@ -27,6 +35,9 @@ public class GunSwap : MonoBehaviour
                 if (pickup != null)
                 {
                     Debug.Log("GunPickup found, equipping: " + pickup.gunPrefab.name);
+                    audioSource.clip = pickupSound;
+                    audioSource.volume = 1.0f;
+                    audioSource.Play();
                     EquipGun(pickup.gunPrefab);
                     Destroy(hit.collider.gameObject);
                 }

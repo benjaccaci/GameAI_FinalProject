@@ -26,6 +26,7 @@ public class ZombieController : MonoBehaviour
 
     [Header("Sounds")]
     public AudioSource audioSource;
+    public AudioClip walkingSound;
     public AudioClip[] hitSounds;
 
     void Start()
@@ -69,6 +70,13 @@ public class ZombieController : MonoBehaviour
 
         transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), 5f * Time.deltaTime);
         transform.position += transform.forward * moveSpeed * Time.deltaTime;
+
+        if (!audioSource.isPlaying)
+        {
+            audioSource.clip = walkingSound;
+            audioSource.volume = 1.0f;
+            audioSource.Play();
+        }
     }
 
     void Attack()
@@ -109,7 +117,9 @@ IEnumerator DealDamageAfterDelay(float delay)
         if (audioSource != null && hitSounds.Length > 0)
         {
             int index = Random.Range(0, hitSounds.Length);
-            audioSource.PlayOneShot(hitSounds[index]);
+            audioSource.clip = hitSounds[index];
+            audioSource.volume = 1.0f;
+            audioSource.Play();
         }
 
         if (currentHealth <= 0f)

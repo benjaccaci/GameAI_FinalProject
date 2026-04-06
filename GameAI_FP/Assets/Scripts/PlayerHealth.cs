@@ -7,7 +7,9 @@ public class PlayerHealth : MonoBehaviour
     public Slider healthSlider;
     public Image bloodSplatterEffect;
     public Color bloodSplatterColor;
-    int maxHealth = 100;
+    public AudioClip damageSFX;
+    public int maxHealth = 100;
+    private AudioSource sfxAudioSource;
     private LevelManager levelManager;
 
     void Start()
@@ -18,6 +20,8 @@ public class PlayerHealth : MonoBehaviour
         }
         UpdateSlider();
         levelManager = FindFirstObjectByType<LevelManager>();
+        sfxAudioSource = gameObject.AddComponent<AudioSource>();
+        sfxAudioSource.playOnAwake = false;
     }
 
     public void TakeDamage(float damage)
@@ -29,6 +33,11 @@ public class PlayerHealth : MonoBehaviour
             Die();
         }
         UpdateSlider();
+
+    
+        sfxAudioSource.clip = damageSFX;
+        sfxAudioSource.volume = 1.0f;
+        sfxAudioSource.Play();
 
         bloodSplatterEffect.CrossFadeAlpha(1f, 0f, false);
         bloodSplatterEffect.color = bloodSplatterColor;
