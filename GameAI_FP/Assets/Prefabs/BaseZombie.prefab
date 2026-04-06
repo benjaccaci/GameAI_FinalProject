@@ -96,13 +96,13 @@ PrefabInstance:
       addedObject: {fileID: 6210134679334183204}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: cb0fd0f4d34cdf9419e88fd5d7c34b95, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 3583482950419087312}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: cb0fd0f4d34cdf9419e88fd5d7c34b95, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 9101505391618441538}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: cb0fd0f4d34cdf9419e88fd5d7c34b95, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7303786408403446542}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: cb0fd0f4d34cdf9419e88fd5d7c34b95, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -5626367343654367574}
   m_SourcePrefab: {fileID: 100100000, guid: cb0fd0f4d34cdf9419e88fd5d7c34b95, type: 3}
 --- !u!1 &7664173058970473248 stripped
 GameObject:
@@ -144,41 +144,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ZombieController
   moveSpeed: 0.75
-  target: {fileID: 0}
   maxHealth: 100
   attackRange: 2
   attackCooldown: 1.5
   attackDamage: 20
-  detectionRange: 15
+  detectionRange: 25
+  jumpDuration: 0.5
   audioSource: {fileID: 9101505391618441538}
-  walkingSound: {fileID: 8300000, guid: 05896eb110e4542aeb52d457f8752418, type: 3}
   hitSounds:
   - {fileID: 8300000, guid: 71cce53943fce174680aa1cf1c102624, type: 3}
   - {fileID: 8300000, guid: 539a139932b45e34094ce10795c80b6b, type: 3}
   - {fileID: 8300000, guid: 7d9edc377ddd00e449884423f26d4e56, type: 3}
---- !u!136 &3583482950419087312
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7664173058970473248}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.4078653
-  m_Height: 1.87
-  m_Direction: 1
-  m_Center: {x: -0.005049348, y: 0.9084014, z: 0}
 --- !u!82 &9101505391618441538
 AudioSource:
   m_ObjectHideFlags: 0
@@ -192,7 +168,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 0.295
+  m_Volume: 0.086
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -303,3 +279,25 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!195 &-5626367343654367574
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7664173058970473248}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: 0
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4

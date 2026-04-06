@@ -546,7 +546,7 @@ MonoBehaviour:
   adsSpeed: 10
   reloadPoint: {fileID: 7936244766906580582}
   reloadTransitionSpeed: 15
-  gunShotSound: {fileID: 0}
+  gunShotSound: {fileID: 3794004413654790188}
   muzzleFlash: {fileID: 8403948940191526253}
 --- !u!82 &3794004413654790188
 AudioSource:
