@@ -14,12 +14,15 @@ public class WaveManager : MonoBehaviour
     
     public Wave[] waves;
     public int timeBetweenWaves = 5;
+    public AudioClip waveSpawnSFX;
     public TMP_Text waveText;
     public TMP_Text timerText;
     public TMP_Text newWaveText;
+    public LevelManager levelManager;
     private Spawner[] zombieSpawners;
     private int currentWaveIndex = 0;
     private float waveTimer = 0f;
+    private AudioSource audioSource;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -27,6 +30,8 @@ public class WaveManager : MonoBehaviour
         currentWaveIndex = 0;
         zombieSpawners = FindObjectsByType<Spawner>(FindObjectsSortMode.None);
         timerText.text = "00:00";
+        audioSource = gameObject.AddComponent<AudioSource>();
+        audioSource.playOnAwake = false;
 
         StartCoroutine(SpawnWave());
     }
@@ -47,6 +52,7 @@ public class WaveManager : MonoBehaviour
     IEnumerator SpawnWave() {
         if (currentWaveIndex >= waves.Length) {
             Debug.Log("All waves completed!");
+            levelManager.GameWonScreen();
             yield break;
         }
 
@@ -57,6 +63,10 @@ public class WaveManager : MonoBehaviour
             Wave currentWave = waves[currentWaveIndex];
             UpdateWaveText();
             waveTimer = waves[currentWaveIndex].waveDuration;
+
+            audioSource.clip = waveSpawnSFX;
+            audioSource.volume = 1.0f;
+            audioSource.Play();
 
             StartCoroutine(ShowNewWaveText());
 
@@ -78,6 +88,10 @@ public class WaveManager : MonoBehaviour
             }
 
             currentWaveIndex++;
+        }
+
+        if (currentWaveIndex >= waves.Length) {
+            levelManager.GameWonScreen();
         }
     }
 

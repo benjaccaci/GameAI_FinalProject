@@ -4,6 +4,8 @@ public class LevelManager : MonoBehaviour
 {
     public GameObject inGameUIScreen;
     public GameObject deathScreen;
+    public GameObject gameWonScreen;
+    public AudioClip gameWonSFX;
     public AudioClip deathSFX;
     private AudioSource sfxAudioSource;
 
@@ -28,6 +30,18 @@ public class LevelManager : MonoBehaviour
         deathScreen.SetActive(true);
 
         sfxAudioSource.clip = deathSFX;
+        sfxAudioSource.volume = 1.0f;
+        sfxAudioSource.Play();
+    }
+
+    public void GameWonScreen()
+    {
+        Time.timeScale = 0f;
+        Cursor.lockState = CursorLockMode.None;
+        inGameUIScreen.SetActive(false);
+        gameWonScreen.SetActive(true);
+
+        sfxAudioSource.clip = gameWonSFX;
         sfxAudioSource.volume = 1.0f;
         sfxAudioSource.Play();
     }
