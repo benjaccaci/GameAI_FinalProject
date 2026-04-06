@@ -151,6 +151,7 @@ MonoBehaviour:
   attackDamage: 20
   detectionRange: 15
   audioSource: {fileID: 9101505391618441538}
+  walkingSound: {fileID: 8300000, guid: 05896eb110e4542aeb52d457f8752418, type: 3}
   hitSounds:
   - {fileID: 8300000, guid: 71cce53943fce174680aa1cf1c102624, type: 3}
   - {fileID: 8300000, guid: 539a139932b45e34094ce10795c80b6b, type: 3}
