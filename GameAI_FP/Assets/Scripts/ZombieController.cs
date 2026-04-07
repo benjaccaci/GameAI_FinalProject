@@ -21,9 +21,6 @@ public class ZombieController : MonoBehaviour
     [Header("Detection")]
     public float detectionRange = 15f;
 
-    [Header("Jump")]
-    public float jumpDuration = 0.5f;
-
     [Header("Sounds")]
     public AudioSource audioSource;
     public AudioClip[] hitSounds;
@@ -126,8 +123,8 @@ public class ZombieController : MonoBehaviour
         isJumping = true;
         anim.SetBool("isWalking", false);
         anim.SetTrigger("jump");
-
-        yield return new WaitForSeconds(jumpDuration);
+        var info = anim.GetAnimatorTransitionInfo(0);
+        yield return new WaitForSeconds(info.duration);
 
         agent.CompleteOffMeshLink();
         agent.speed = moveSpeed;
