@@ -71,7 +71,7 @@ public class WaveManager : MonoBehaviour
             StartCoroutine(ShowNewWaveText());
 
             // Spawn enemies in the wave
-            yield return StartCoroutine(SpawnEnemies(waves[currentWaveIndex]));
+            yield return StartCoroutine(SpawnEnemies(waves[currentWaveIndex], currentWaveIndex));
             // Wait until all enemies are dead to continue
             yield return new WaitUntil(() => GameObject.FindGameObjectsWithTag("Enemy").Length == 0 || waveTimer <= 0f);
 
@@ -95,17 +95,22 @@ public class WaveManager : MonoBehaviour
         }
     }
 
-    IEnumerator SpawnEnemies(Wave wave) {
+    IEnumerator SpawnEnemies(Wave wave, int waveIndex) {
         for (int i = 0; i < wave.enemyCount; i++) {
             Spawner spawner = zombieSpawners[Random.Range(0, zombieSpawners.Length)];
             GameObject enemyPrefab = wave.enemyPrefabs[Random.Range(0, wave.enemyPrefabs.Length)];
-            SpawnEnemy(enemyPrefab, spawner.gameObject);
+            SpawnEnemy(enemyPrefab, spawner.gameObject, waveIndex);
             yield return new WaitForSeconds(wave.spawnInterval);
         }
     }
 
-    void SpawnEnemy(GameObject enemyPrefab, GameObject spawner) {
-        Instantiate(enemyPrefab, spawner.transform.position, spawner.transform.rotation);
+    void SpawnEnemy(GameObject enemyPrefab, GameObject spawner, int waveIndex) {
+        GameObject enemy = Instantiate(enemyPrefab, spawner.transform.position, spawner.transform.rotation);
+        ZombieSight sight = enemy.GetComponent<ZombieSight>();
+        if (sight != null)
+        {
+            sight.waveId = waveIndex;
+        }
     }
 
 
