@@ -6,6 +6,8 @@ public class HealthPack : MonoBehaviour
     public int healthAmount = 20;
     public AudioClip pickupSFX;
     private AudioSource sfxAudioSource;
+    private bool hasBeenTriggered = false;
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -25,13 +27,14 @@ public class HealthPack : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             PlayerHealth playerHealth = other.GetComponent<PlayerHealth>();
-            if (playerHealth != null)
+            if (playerHealth != null && !hasBeenTriggered)
             {
                 playerHealth.AddHealth(healthAmount);
+                hasBeenTriggered = true;
                 sfxAudioSource.clip = pickupSFX;
                 sfxAudioSource.volume = 1.0f;
                 sfxAudioSource.Play();
-                Destroy(gameObject, 1.0f);
+                Destroy(gameObject, pickupSFX.length);
             }
         }
     }

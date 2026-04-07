@@ -25,7 +25,10 @@ public class ZombieController : MonoBehaviour
     [Header("Sounds")]
     public AudioSource audioSource;
     public AudioClip[] hitSounds;
-
+    [Header("Loot Drops")]
+    public GameObject healthPackPrefab;
+    public GameObject ammoPackPrefab;
+    public GameObject coinPrefab;
     private Animator anim;
     private NavMeshAgent agent;
     private Transform player;
@@ -147,6 +150,24 @@ public class ZombieController : MonoBehaviour
         anim.SetTrigger("die");
         agent.enabled = false;
         GetComponent<Collider>().enabled = false;
+        DropLoot();
         Destroy(gameObject, 3f);
+    }
+
+    void DropLoot()
+    {
+        int randomValue = Random.Range(0, 100);
+        if (randomValue < 33)
+        {
+            Instantiate(healthPackPrefab, transform.position + Vector3.up, Quaternion.identity);
+        }
+        else if (randomValue < 67)
+        {
+            Instantiate(ammoPackPrefab, transform.position + Vector3.up, Quaternion.identity);
+        }
+        else if (randomValue > 67)
+        {
+            Instantiate(coinPrefab, transform.position + Vector3.up, coinPrefab.transform.rotation);
+        }
     }
 }

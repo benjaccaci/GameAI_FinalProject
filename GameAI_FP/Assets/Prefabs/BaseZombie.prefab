@@ -158,6 +158,9 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 71cce53943fce174680aa1cf1c102624, type: 3}
   - {fileID: 8300000, guid: 539a139932b45e34094ce10795c80b6b, type: 3}
   - {fileID: 8300000, guid: 7d9edc377ddd00e449884423f26d4e56, type: 3}
+  healthPackPrefab: {fileID: 1279140426991430450, guid: 360690a7c06559a4f927c76899139848, type: 3}
+  ammoPackPrefab: {fileID: 8508108226459305054, guid: f5c0651bf1f57488eb01113b409f1c28, type: 3}
+  coinPrefab: {fileID: 858813385582907794, guid: 439073db2a2c34ec4802631a1847d23a, type: 3}
 --- !u!82 &9101505391618441538
 AudioSource:
   m_ObjectHideFlags: 0
