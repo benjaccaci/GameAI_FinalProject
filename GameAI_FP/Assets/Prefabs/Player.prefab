@@ -20,7 +20,7 @@ GameObject:
   - component: {fileID: 8397510910102634317}
   - component: {fileID: 9177526749495631166}
   - component: {fileID: 574927594445296188}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -378,7 +378,7 @@ GameObject:
   - component: {fileID: 8104731052286226801}
   - component: {fileID: 8252483937589875153}
   - component: {fileID: 5809972988714523258}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: MainCamera
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
@@ -513,7 +513,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1018873659924520312}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: CameraHolder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -545,7 +545,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2892813502300892089}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: GunHolder
   m_TagString: GunHolder
   m_Icon: {fileID: 0}
