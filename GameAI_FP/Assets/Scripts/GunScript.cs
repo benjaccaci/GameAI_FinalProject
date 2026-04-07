@@ -12,6 +12,7 @@ public class GunScript : MonoBehaviour
 
     [Header("UI")]
     public TMP_Text ammoCountUI;
+    public TMP_Text reserveAmmoUI;
 
     [Header("Gun Type")]
     public bool isFullAuto = false;
@@ -74,8 +75,11 @@ public class GunScript : MonoBehaviour
         originalRotation = gunModel.localRotation;
         currentAmmo = magSize;
 
-        if (ammoCountUI != null)
+        if (ammoCountUI != null && reserveAmmoUI != null && isEquipped)
+        {
             ammoCountUI.text = currentAmmo.ToString();
+            reserveAmmoUI.text = reserveAmmo.ToString();
+        }
 
         if (playerCamera == null)
             playerCamera = Camera.main;
@@ -86,6 +90,13 @@ public class GunScript : MonoBehaviour
     void Update()
     {
         if (!isEquipped) return;
+
+        if (isEquipped && ammoCountUI != null && reserveAmmoUI != null)
+            {
+                ammoCountUI.text = currentAmmo.ToString();
+                reserveAmmoUI.text = reserveAmmo.ToString();
+            }
+
 
         if (isReloading)
         {
@@ -134,8 +145,17 @@ public class GunScript : MonoBehaviour
             nextFireTime = Time.time + fireRate;
             currentAmmo--;
 
-            if (ammoCountUI != null)
+            if (!isEquipped)
+            {
+                ammoCountUI.text = "00";
+                reserveAmmoUI.text = "00";
+            }
+
+            if (isEquipped && ammoCountUI != null && reserveAmmoUI != null)
+            {
                 ammoCountUI.text = currentAmmo.ToString();
+                reserveAmmoUI.text = reserveAmmo.ToString();
+            }
 
             Debug.Log("Ammo: " + currentAmmo + "/" + magSize + " | Reserve: " + reserveAmmo);
 
@@ -208,7 +228,10 @@ public class GunScript : MonoBehaviour
         reserveAmmo -= ammoToReload;
 
         if (ammoCountUI != null)
+        {
             ammoCountUI.text = currentAmmo.ToString();
+            reserveAmmoUI.text = reserveAmmo.ToString();
+        }
 
         Debug.Log("Reloaded! Ammo: " + currentAmmo + "/" + magSize + " | Reserve: " + reserveAmmo);
         isReloading = false;

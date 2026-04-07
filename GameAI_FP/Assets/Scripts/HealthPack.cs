@@ -31,7 +31,7 @@ public class HealthPack : MonoBehaviour
                 sfxAudioSource.clip = pickupSFX;
                 sfxAudioSource.volume = 1.0f;
                 sfxAudioSource.Play();
-                Destroy(gameObject);
+                Destroy(gameObject, 1.0f);
             }
         }
     }

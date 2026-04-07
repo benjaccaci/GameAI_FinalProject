@@ -50332,6 +50332,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 977560170610357376, guid: 678c53eff00e9a241a78837ca4c71e36, type: 3}
+      propertyPath: ammoCountUI
+      value: 
+      objectReference: {fileID: 696901827}
+    - target: {fileID: 977560170610357376, guid: 678c53eff00e9a241a78837ca4c71e36, type: 3}
+      propertyPath: reserveAmmoUI
+      value: 
+      objectReference: {fileID: 948865233}
     - target: {fileID: 3642922878166127224, guid: 678c53eff00e9a241a78837ca4c71e36, type: 3}
       propertyPath: m_Name
       value: M4A4
