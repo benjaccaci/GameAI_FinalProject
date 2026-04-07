@@ -275,6 +275,19 @@ public class GunScript : MonoBehaviour
         DrawTrail(ray.origin, endPoint);
     }
 
+    public void AddAmmo(int amount)
+    {
+        reserveAmmo += amount;
+        if (reserveAmmo < 0)
+            reserveAmmo = 0;
+
+        if (isEquipped && ammoCountUI != null && reserveAmmoUI != null)
+        {
+            ammoCountUI.text = currentAmmo.ToString();
+            reserveAmmoUI.text = reserveAmmo.ToString();
+        }
+    }
+
     void DrawTrail(Vector3 start, Vector3 end)
     {
         // GameObject trail = new GameObject("BulletTrail");
