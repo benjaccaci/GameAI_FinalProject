@@ -106,6 +106,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: cb0fd0f4d34cdf9419e88fd5d7c34b95, type: 3}
       insertIndex: -1
       addedObject: {fileID: -8774409646860818940}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: cb0fd0f4d34cdf9419e88fd5d7c34b95, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1579349620644740803}
   m_SourcePrefab: {fileID: 100100000, guid: cb0fd0f4d34cdf9419e88fd5d7c34b95, type: 3}
 --- !u!1 &7664173058970473248 stripped
 GameObject:
@@ -152,7 +155,6 @@ MonoBehaviour:
   attackCooldown: 1.5
   attackDamage: 20
   detectionRange: 25
-  jumpDuration: 0.5
   audioSource: {fileID: 9101505391618441538}
   hitSounds:
   - {fileID: 8300000, guid: 71cce53943fce174680aa1cf1c102624, type: 3}
@@ -330,3 +332,49 @@ CapsuleCollider:
   m_Height: 2.5614657
   m_Direction: 1
   m_Center: {x: 0, y: 0.78073287, z: 0}
+--- !u!114 &1579349620644740803
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7664173058970473248}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23bbf2c6f5f36423b91db75d0ea55321, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AgentLinkMover
+  m_Method: 2
+  m_Curve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.5
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 136
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4

@@ -1,6 +1,8 @@
+using System;
 using UnityEngine;
 using UnityEngine.AI;
 using System.Collections;
+using Random = UnityEngine.Random;
 
 public class ZombieController : MonoBehaviour
 {
@@ -19,12 +21,10 @@ public class ZombieController : MonoBehaviour
     [Header("Detection")]
     public float detectionRange = 15f;
 
-    [Header("Jump")]
-    public float jumpDuration = 0.5f;
-
     [Header("Sounds")]
     public AudioSource audioSource;
     public AudioClip[] hitSounds;
+    
     [Header("Loot Drops")]
     public GameObject healthPackPrefab;
     public GameObject ammoPackPrefab;
@@ -35,7 +35,7 @@ public class ZombieController : MonoBehaviour
     private float nextAttackTime = 0f;
     private bool isDead = false;
     private bool isJumping = false;
-
+    
     void Start()
     {
         anim = GetComponent<Animator>();
@@ -119,15 +119,17 @@ public class ZombieController : MonoBehaviour
 
     IEnumerator HandleJump()
     {
+        agent.updatePosition = false;
         isJumping = true;
         anim.SetBool("isWalking", false);
         anim.SetTrigger("jump");
-
-        yield return new WaitForSeconds(jumpDuration);
+        var info = anim.GetAnimatorTransitionInfo(0);
+        yield return new WaitForSeconds(info.duration);
 
         agent.CompleteOffMeshLink();
         agent.speed = moveSpeed;
         isJumping = false;
+        agent.updatePosition = true;
     }
 
     public void TakeDamage(float damage)
