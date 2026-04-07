@@ -1,11 +1,11 @@
 using UnityEngine;
+using UnityEngine.AI;
 using System.Collections;
 
 public class ZombieController : MonoBehaviour
 {
     [Header("Movement")]
     public float moveSpeed = 3f;
-    public Transform target;
 
     [Header("Health")]
     public float maxHealth = 100f;
@@ -19,26 +19,45 @@ public class ZombieController : MonoBehaviour
     [Header("Detection")]
     public float detectionRange = 15f;
 
-    private Animator anim;
-    private Transform player;
-    private float nextAttackTime = 0f;
-    private bool isDead = false;
+    [Header("Jump")]
+    public float jumpDuration = 0.5f;
 
     [Header("Sounds")]
     public AudioSource audioSource;
-    public AudioClip walkingSound;
     public AudioClip[] hitSounds;
+    [Header("Loot Drops")]
+    public GameObject healthPackPrefab;
+    public GameObject ammoPackPrefab;
+    public GameObject coinPrefab;
+    private Animator anim;
+    private NavMeshAgent agent;
+    private Transform player;
+    private float nextAttackTime = 0f;
+    private bool isDead = false;
+    private bool isJumping = false;
 
     void Start()
     {
         anim = GetComponent<Animator>();
+        agent = GetComponent<NavMeshAgent>();
         player = GameObject.FindGameObjectWithTag("Player").transform;
         currentHealth = maxHealth;
+
+        agent.speed = moveSpeed;
+        agent.stoppingDistance = attackRange;
     }
 
     void Update()
     {
         if (isDead) return;
+
+        if (agent.isOnOffMeshLink && !isJumping)
+        {
+            StartCoroutine(HandleJump());
+            return;
+        }
+
+        if (isJumping) return;
 
         float distanceToPlayer = Vector3.Distance(transform.position, player.position);
 
@@ -59,29 +78,19 @@ public class ZombieController : MonoBehaviour
     void Idle()
     {
         anim.SetBool("isWalking", false);
+        agent.ResetPath();
     }
 
     void ChasePlayer()
     {
         anim.SetBool("isWalking", true);
-
-        Vector3 direction = (player.position - transform.position).normalized;
-        direction.y = 0f;
-
-        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), 5f * Time.deltaTime);
-        transform.position += transform.forward * moveSpeed * Time.deltaTime;
-
-        if (!audioSource.isPlaying)
-        {
-            audioSource.clip = walkingSound;
-            audioSource.volume = 1.0f;
-            audioSource.Play();
-        }
+        agent.SetDestination(player.position);
     }
 
     void Attack()
     {
         anim.SetBool("isWalking", false);
+        agent.ResetPath();
 
         Vector3 direction = (player.position - transform.position).normalized;
         direction.y = 0f;
@@ -91,22 +100,35 @@ public class ZombieController : MonoBehaviour
         {
             nextAttackTime = Time.time + attackCooldown;
             anim.SetTrigger("attack");
-            StartCoroutine(DealDamageAfterDelay(0.8f));
+            StartCoroutine(DealDamageAfterDelay(0.5f));
         }
     }
 
-IEnumerator DealDamageAfterDelay(float delay)
-{
-    yield return new WaitForSeconds(delay);
-
-    float distance = Vector3.Distance(transform.position, player.position);
-    if (distance <= attackRange)
+    IEnumerator DealDamageAfterDelay(float delay)
     {
-        PlayerHealth playerHealth = player.GetComponent<PlayerHealth>();
-        if (playerHealth != null)
-            playerHealth.TakeDamage(attackDamage);
+        yield return new WaitForSeconds(delay);
+
+        float distance = Vector3.Distance(transform.position, player.position);
+        if (distance <= attackRange)
+        {
+            PlayerHealth playerHealth = player.GetComponent<PlayerHealth>();
+            if (playerHealth != null)
+                playerHealth.TakeDamage(attackDamage);
+        }
     }
-}
+
+    IEnumerator HandleJump()
+    {
+        isJumping = true;
+        anim.SetBool("isWalking", false);
+        anim.SetTrigger("jump");
+
+        yield return new WaitForSeconds(jumpDuration);
+
+        agent.CompleteOffMeshLink();
+        agent.speed = moveSpeed;
+        isJumping = false;
+    }
 
     public void TakeDamage(float damage)
     {
@@ -114,13 +136,9 @@ IEnumerator DealDamageAfterDelay(float delay)
 
         currentHealth -= damage;
         Debug.Log("Zombie took " + damage + " damage. HP: " + currentHealth + "/" + maxHealth);
-        if (audioSource != null && hitSounds.Length > 0)
-        {
-            int index = Random.Range(0, hitSounds.Length);
-            audioSource.clip = hitSounds[index];
-            audioSource.volume = 1.0f;
-            audioSource.Play();
-        }
+
+        if (hitSounds.Length > 0 && audioSource != null)
+            audioSource.PlayOneShot(hitSounds[Random.Range(0, hitSounds.Length)]);
 
         if (currentHealth <= 0f)
             Die();
@@ -130,7 +148,26 @@ IEnumerator DealDamageAfterDelay(float delay)
     {
         isDead = true;
         anim.SetTrigger("die");
+        agent.enabled = false;
         GetComponent<Collider>().enabled = false;
-        Destroy(gameObject, 10f);
+        DropLoot();
+        Destroy(gameObject, 3f);
+    }
+
+    void DropLoot()
+    {
+        int randomValue = Random.Range(0, 100);
+        if (randomValue < 33)
+        {
+            Instantiate(healthPackPrefab, transform.position + Vector3.up, Quaternion.identity);
+        }
+        else if (randomValue < 67)
+        {
+            Instantiate(ammoPackPrefab, transform.position + Vector3.up, Quaternion.identity);
+        }
+        else if (randomValue > 67)
+        {
+            Instantiate(coinPrefab, transform.position + Vector3.up, coinPrefab.transform.rotation);
+        }
     }
 }

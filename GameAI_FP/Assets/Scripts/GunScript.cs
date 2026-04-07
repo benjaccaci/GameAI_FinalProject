@@ -4,8 +4,15 @@ using TMPro;
 
 public class GunScript : MonoBehaviour
 {
+    [Header("State")]
+    public bool isEquipped = false;
+
+    [Header("Model")]
+    public Transform gunModel;
+
     [Header("UI")]
     public TMP_Text ammoCountUI;
+    public TMP_Text reserveAmmoUI;
 
     [Header("Gun Type")]
     public bool isFullAuto = false;
@@ -62,11 +69,16 @@ public class GunScript : MonoBehaviour
 
     void Start()
     {
-        originalRotation = transform.localRotation;
+        if (gunModel == null)
+            gunModel = transform;
+
+        originalRotation = gunModel.localRotation;
         currentAmmo = magSize;
-        if (ammoCountUI != null)
+
+        if (ammoCountUI != null && reserveAmmoUI != null && isEquipped)
         {
             ammoCountUI.text = currentAmmo.ToString();
+            reserveAmmoUI.text = reserveAmmo.ToString();
         }
 
         if (playerCamera == null)
@@ -77,21 +89,30 @@ public class GunScript : MonoBehaviour
 
     void Update()
     {
+        if (!isEquipped) return;
+
+        if (isEquipped && ammoCountUI != null && reserveAmmoUI != null)
+            {
+                ammoCountUI.text = currentAmmo.ToString();
+                reserveAmmoUI.text = reserveAmmo.ToString();
+            }
+
+
         if (isReloading)
         {
             if (reloadReturning)
             {
-                transform.position = Vector3.Lerp(transform.position, hipFirePoint.position, reloadTransitionSpeed * Time.deltaTime);
-                transform.localRotation = Quaternion.Slerp(transform.localRotation, originalRotation, reloadTransitionSpeed * Time.deltaTime);
+                gunModel.position = Vector3.Lerp(gunModel.position, hipFirePoint.position, reloadTransitionSpeed * Time.deltaTime);
+                gunModel.localRotation = Quaternion.Slerp(gunModel.localRotation, originalRotation, reloadTransitionSpeed * Time.deltaTime);
             }
             else if (reloadPoint != null)
             {
-                transform.position = Vector3.Lerp(transform.position, reloadPoint.position, reloadTransitionSpeed * Time.deltaTime);
-                transform.localRotation = Quaternion.Slerp(transform.localRotation, reloadPoint.localRotation, reloadTransitionSpeed * Time.deltaTime);
+                gunModel.position = Vector3.Lerp(gunModel.position, reloadPoint.position, reloadTransitionSpeed * Time.deltaTime);
+                gunModel.localRotation = Quaternion.Slerp(gunModel.localRotation, reloadPoint.localRotation, reloadTransitionSpeed * Time.deltaTime);
             }
             else
             {
-                transform.position = Vector3.Lerp(transform.position, hipFirePoint.position, reloadTransitionSpeed * Time.deltaTime);
+                gunModel.position = Vector3.Lerp(gunModel.position, hipFirePoint.position, reloadTransitionSpeed * Time.deltaTime);
             }
             return;
         }
@@ -112,9 +133,9 @@ public class GunScript : MonoBehaviour
 
         // ADS / Hip fire
         if (Input.GetMouseButton(1))
-            transform.position = Vector3.Lerp(transform.position, adsPoint.position, adsSpeed * Time.deltaTime);
+            gunModel.position = Vector3.Lerp(gunModel.position, adsPoint.position, adsSpeed * Time.deltaTime);
         else
-            transform.position = Vector3.Lerp(transform.position, hipFirePoint.position, adsSpeed * Time.deltaTime);
+            gunModel.position = Vector3.Lerp(gunModel.position, hipFirePoint.position, adsSpeed * Time.deltaTime);
 
         // Shooting
         bool fireInput = isFullAuto ? Input.GetMouseButton(0) : Input.GetMouseButtonDown(0);
@@ -123,15 +144,23 @@ public class GunScript : MonoBehaviour
         {
             nextFireTime = Time.time + fireRate;
             currentAmmo--;
-            if (ammoCountUI != null)
+
+            if (!isEquipped)
+            {
+                ammoCountUI.text = "00";
+                reserveAmmoUI.text = "00";
+            }
+
+            if (isEquipped && ammoCountUI != null && reserveAmmoUI != null)
             {
                 ammoCountUI.text = currentAmmo.ToString();
+                reserveAmmoUI.text = reserveAmmo.ToString();
             }
 
             Debug.Log("Ammo: " + currentAmmo + "/" + magSize + " | Reserve: " + reserveAmmo);
 
             // Snap to recoil position instantly
-            transform.localRotation = originalRotation * Quaternion.Euler(-recoilAmount, Random.Range(-0.5f, 0.5f), 0f);
+            gunModel.localRotation = originalRotation * Quaternion.Euler(-recoilAmount, Random.Range(-0.5f, 0.5f), 0f);
 
             if (gunShotSound != null)
                 gunShotSound.Play();
@@ -165,7 +194,7 @@ public class GunScript : MonoBehaviour
             recoilTimer = 0f;
 
         // Smooth recovery back to original rotation
-        transform.localRotation = Quaternion.Slerp(transform.localRotation, originalRotation, returnSpeed * Time.deltaTime);
+        gunModel.localRotation = Quaternion.Slerp(gunModel.localRotation, originalRotation, returnSpeed * Time.deltaTime);
     }
 
     IEnumerator Reload()
@@ -180,10 +209,8 @@ public class GunScript : MonoBehaviour
             float clipLength = reloadSound.clip.length;
             float returnTime = 0.3f;
 
-            // Stay in reload position until near the end
             yield return new WaitForSeconds(clipLength - returnTime);
 
-            // Start returning early so gun is back in time
             reloadReturning = true;
             yield return new WaitForSeconds(returnTime);
         }
@@ -199,9 +226,11 @@ public class GunScript : MonoBehaviour
 
         currentAmmo += ammoToReload;
         reserveAmmo -= ammoToReload;
+
         if (ammoCountUI != null)
         {
             ammoCountUI.text = currentAmmo.ToString();
+            reserveAmmoUI.text = reserveAmmo.ToString();
         }
 
         Debug.Log("Reloaded! Ammo: " + currentAmmo + "/" + magSize + " | Reserve: " + reserveAmmo);
@@ -236,11 +265,27 @@ public class GunScript : MonoBehaviour
             endPoint = hit.point;
 
             ZombieController zombie = hit.collider.GetComponent<ZombieController>();
+            if (zombie == null)
+                zombie = hit.collider.GetComponentInParent<ZombieController>();
+
             if (zombie != null)
                 zombie.TakeDamage(damage);
         }
 
         DrawTrail(ray.origin, endPoint);
+    }
+
+    public void AddAmmo(int amount)
+    {
+        reserveAmmo += amount;
+        if (reserveAmmo < 0)
+            reserveAmmo = 0;
+
+        if (isEquipped && ammoCountUI != null && reserveAmmoUI != null)
+        {
+            ammoCountUI.text = currentAmmo.ToString();
+            reserveAmmoUI.text = reserveAmmo.ToString();
+        }
     }
 
     void DrawTrail(Vector3 start, Vector3 end)
