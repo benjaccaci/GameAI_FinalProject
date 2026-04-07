@@ -155,7 +155,6 @@ MonoBehaviour:
   attackCooldown: 1.5
   attackDamage: 20
   detectionRange: 25
-  jumpDuration: 0.5
   audioSource: {fileID: 9101505391618441538}
   hitSounds:
   - {fileID: 8300000, guid: 71cce53943fce174680aa1cf1c102624, type: 3}
@@ -345,7 +344,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23bbf2c6f5f36423b91db75d0ea55321, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AgentLinkMover
-  m_Method: 3
+  m_Method: 2
   m_Curve:
     serializedVersion: 2
     m_Curve:
