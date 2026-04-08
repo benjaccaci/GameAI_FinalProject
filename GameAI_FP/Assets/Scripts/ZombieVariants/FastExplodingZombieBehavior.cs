@@ -94,8 +94,10 @@ public class FastExplodingZombieBehavior : ZombieVariantBehavior
     {
         if (hasExploded) return;
         hasExploded = true;
-        if (explosionVFXPrefab)
-            Instantiate(explosionVFXPrefab, transform.position, Quaternion.identity);
+        if (explosionVFXPrefab) {
+            GameObject vfx = Instantiate(explosionVFXPrefab, transform.position + Vector3.up * 1f, Quaternion.identity);
+            vfx.transform.localScale = Vector3.one * 2f;
+        }
         // player takes damage if in the radius
         Collider[] hits = Physics.OverlapSphere(transform.position, explosionRadius);
         foreach (var hit in hits)
