@@ -36530,8 +36530,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   waves:
   - enemyPrefabs:
-    - {fileID: 7664173058970473248, guid: be7e8a5f9b59e4203855f6074d868419, type: 3}
-    enemyCount: 1
+    - {fileID: 7664173058970473248, guid: b6824ae61b0424075ae623265b2337e2, type: 3}
+    enemyCount: 2
     spawnInterval: 1
     waveDuration: 60
   - enemyPrefabs:
