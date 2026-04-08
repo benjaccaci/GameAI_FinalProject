@@ -103,6 +103,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: cb0fd0f4d34cdf9419e88fd5d7c34b95, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7303786408403446542}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: cb0fd0f4d34cdf9419e88fd5d7c34b95, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -166703904327648215}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: cb0fd0f4d34cdf9419e88fd5d7c34b95, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -8786842260524553807}
   m_SourcePrefab: {fileID: 100100000, guid: cb0fd0f4d34cdf9419e88fd5d7c34b95, type: 3}
 --- !u!1 &7664173058970473248 stripped
 GameObject:
@@ -144,7 +150,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ZombieController
   moveSpeed: 2
-  target: {fileID: 0}
   maxHealth: 50
   attackRange: 2
   attackCooldown: 1.5
@@ -155,6 +160,9 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 71cce53943fce174680aa1cf1c102624, type: 3}
   - {fileID: 8300000, guid: 539a139932b45e34094ce10795c80b6b, type: 3}
   - {fileID: 8300000, guid: 7d9edc377ddd00e449884423f26d4e56, type: 3}
+  healthPackPrefab: {fileID: 1279140426991430450, guid: 360690a7c06559a4f927c76899139848, type: 3}
+  ammoPackPrefab: {fileID: 8508108226459305054, guid: f5c0651bf1f57488eb01113b409f1c28, type: 3}
+  coinPrefab: {fileID: 858813385582907794, guid: 439073db2a2c34ec4802631a1847d23a, type: 3}
 --- !u!136 &3583482950419087312
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -302,3 +310,45 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &-166703904327648215
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7664173058970473248}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 704f1b7a0091242d3a21d395bdc9fb93, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FastExplodingZombieBehavior
+  fastMoveSpeed: 5
+  fuseRange: 3
+  explosionRadius: 2
+  explosionDamage: 80
+  explosionVFXPrefab: {fileID: 1007127540951276732, guid: 3ace37360f306cb4aac03640550fa9ef, type: 3}
+  fuseLitClip: {fileID: 8300000, guid: 039592cc31f4b4fa2a9daa9dc2e642ed, type: 3}
+  fuseCountdownClip: {fileID: 8300000, guid: 44f6bf940a64d47c28b243b1cee990fb, type: 3}
+  explosionClip: {fileID: 8300000, guid: 2be1a03d5623540449caf1981c8b19c7, type: 3}
+--- !u!195 &-8786842260524553807
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7664173058970473248}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: 0
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4

@@ -9,11 +9,13 @@ public class GunSwap : MonoBehaviour
     public AudioClip pickupSound;
     private GameObject currentGun;
     private AudioSource audioSource;
+    private PlayerMoney playerMoney;
 
     void Start()
     {
         audioSource = gameObject.AddComponent<AudioSource>();
         audioSource.playOnAwake = false;
+        playerMoney = GetComponent<PlayerMoney>();
 
         if (gunHolder == null)
         {
@@ -23,23 +25,17 @@ public class GunSwap : MonoBehaviour
             else
                 Debug.LogError("No object with tag 'GunHolder' found!");
         }
-
-        Debug.Log("GunHolder: " + (gunHolder != null ? GetPath(gunHolder) : "NOT FOUND"));
     }
 
     void Update()
     {
         if (Input.GetKeyDown(pickupKey))
         {
-            Debug.Log("E pressed");
-
             Ray ray = playerCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
             RaycastHit hit;
 
             if (Physics.Raycast(ray, out hit, pickupRange))
             {
-                Debug.Log("Ray hit: " + hit.collider.gameObject.name + " Tag: " + hit.collider.tag);
-
                 if (hit.collider.CompareTag("Gun"))
                 {
                     GameObject gunObject = hit.collider.gameObject;
@@ -50,38 +46,48 @@ public class GunSwap : MonoBehaviour
 
                     if (gunScript != null)
                     {
-                        Debug.Log("GunScript found on: " + gunScript.gameObject.name);
-                        audioSource.clip = pickupSound;
-                        audioSource.volume = 1.0f;
-                        audioSource.Play();
-                        EquipGun(gunScript.gameObject);
+                        // Check price
+                        GunPrice gunPrice = gunScript.GetComponent<GunPrice>();
+                        if (gunPrice == null)
+                            gunPrice = gunScript.GetComponentInChildren<GunPrice>();
+
+                        if (gunPrice != null && gunPrice.price > 0)
+                        {
+                            if (playerMoney != null && playerMoney.SpendMoney(gunPrice.price))
+                            {
+                                Debug.Log("Bought " + gunScript.gameObject.name + " for $" + gunPrice.price);
+                                audioSource.clip = pickupSound;
+                                audioSource.volume = 1.0f;
+                                audioSource.Play();
+                                EquipGun(gunScript.gameObject);
+                            }
+                            else
+                            {
+                                Debug.Log("Not enough money! Need $" + gunPrice.price);
+                            }
+                        }
+                        else
+                        {
+                            // Free gun, just pick it up
+                            audioSource.clip = pickupSound;
+                            audioSource.volume = 1.0f;
+                            audioSource.Play();
+                            EquipGun(gunScript.gameObject);
+                        }
                     }
                     else
                     {
-                        Debug.LogError("No GunScript found anywhere on: " + gunObject.name);
+                        Debug.LogError("No GunScript found on: " + gunObject.name);
                     }
                 }
-                else
-                {
-                    Debug.Log("Not a gun. Name: " + hit.collider.gameObject.name + " Tag: " + hit.collider.tag);
-                }
-            }
-            else
-            {
-                Debug.Log("Ray hit nothing within range: " + pickupRange);
             }
         }
     }
 
     void EquipGun(GameObject newGun)
     {
-        Debug.Log("--- EQUIP START ---");
-        Debug.Log("Equipping: " + newGun.name);
-
-        // Drop current gun back into the world
         if (currentGun != null)
         {
-            Debug.Log("Dropping current gun: " + currentGun.name);
             currentGun.transform.SetParent(null);
 
             GunScript oldGunScript = currentGun.GetComponent<GunScript>();
@@ -102,7 +108,6 @@ public class GunSwap : MonoBehaviour
             rb.isKinematic = false;
         }
 
-        // Pick up new gun
         currentGun = newGun;
 
         Rigidbody newRb = currentGun.GetComponent<Rigidbody>();
@@ -120,24 +125,12 @@ public class GunSwap : MonoBehaviour
         currentGun.transform.localRotation = Quaternion.identity;
         currentGun.transform.localScale = Vector3.one;
 
-        Debug.Log("Parent after: " + (currentGun.transform.parent != null ? currentGun.transform.parent.name : "FAILED"));
-        Debug.Log("World pos: " + currentGun.transform.position);
-
         GunScript gunScript = currentGun.GetComponent<GunScript>();
         if (gunScript == null)
             gunScript = currentGun.GetComponentInChildren<GunScript>();
 
         if (gunScript != null)
-        {
             gunScript.isEquipped = true;
-            Debug.Log("GunScript enabled on: " + gunScript.gameObject.name);
-        }
-        else
-        {
-            Debug.LogError("No GunScript found after parenting!");
-        }
-
-        Debug.Log("--- EQUIP END ---");
     }
 
     string GetPath(Transform t)

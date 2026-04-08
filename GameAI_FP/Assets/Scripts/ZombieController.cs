@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
+using System.Collections;
 using Random = UnityEngine.Random;
 
 public class ZombieController : MonoBehaviour
@@ -27,6 +28,9 @@ public class ZombieController : MonoBehaviour
     public float attackCooldown = 1.5f;
     public float attackDamage = 20f;
 
+    [Header("Detection")]
+    public float detectionRange = 15f;
+
     [Header("Sounds")]
     public AudioSource audioSource;
     public AudioClip[] hitSounds;
@@ -51,6 +55,8 @@ public class ZombieController : MonoBehaviour
     private float searchTimer = 0f;
     private bool hasSearchDestination = false;
 
+    private ZombieVariantBehavior variant;
+    
     void Start()
     {
         anim = GetComponent<Animator>();
@@ -61,6 +67,8 @@ public class ZombieController : MonoBehaviour
 
         agent.speed = moveSpeed;
         agent.stoppingDistance = attackRange;
+
+        variant = GetComponent<ZombieVariantBehavior>();
     }
 
     void Update()
@@ -75,107 +83,24 @@ public class ZombieController : MonoBehaviour
 
         if (isJumping) return;
 
-        UpdateState();
-        ExecuteState();
-    }
+        float distanceToPlayer = Vector3.Distance(transform.position, player.position);
 
-    void UpdateState()
-    {
-        // Sight-based transitions take priority
-        if (sight.HasTarget)
+        if (distanceToPlayer <= attackRange)
         {
-            float distanceToPlayer = Vector3.Distance(transform.position, player.position);
-            if (distanceToPlayer <= attackRange)
-            {
-                TransitionTo(ZombieState.Attack);
-            }
-            else
-            {
-                TransitionTo(ZombieState.Chase);
-            }
-            return;
-        }
-
-        // If we just lost the target or received an alert, investigate
-        if (sight.IsAlerted && CurrentState != ZombieState.Investigate && CurrentState != ZombieState.Search)
-        {
-            TransitionTo(ZombieState.Investigate);
-            return;
-        }
-
-        // If investigating and arrived at destination
-        if (CurrentState == ZombieState.Investigate)
-        {
-            if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
-            {
-                TransitionTo(ZombieState.Search);
-            }
-            return;
-        }
-
-        // If searching and timer expired
-        if (CurrentState == ZombieState.Search)
-        {
-            searchTimer -= Time.deltaTime;
-            if (searchTimer <= 0f)
-            {
-                TransitionTo(ZombieState.Idle);
-            }
-            return;
-        }
-    }
-
-    void TransitionTo(ZombieState newState)
-    {
-        if (CurrentState == newState) return;
-
-        // Exit current state
-        switch (CurrentState)
-        {
-            case ZombieState.Search:
-                hasSearchDestination = false;
-                break;
-        }
-
-        CurrentState = newState;
-
-        // Enter new state
-        switch (newState)
-        {
-            case ZombieState.Idle:
-                sight.ClearAlertState();
-                break;
-            case ZombieState.Investigate:
-                agent.SetDestination(sight.LastKnownPosition);
-                anim.SetBool("isWalking", true);
-                break;
-            case ZombieState.Search:
-                sight.BeginSearch();
-                searchTimer = sight.config.searchDuration;
-                hasSearchDestination = false;
-                break;
-        }
-    }
-
-    void ExecuteState()
-    {
-        switch (CurrentState)
-        {
-            case ZombieState.Idle:
-                Idle();
-                break;
-            case ZombieState.Chase:
-                ChasePlayer();
-                break;
-            case ZombieState.Attack:
+            FastExplodingZombieBehavior exploder = variant as FastExplodingZombieBehavior;
+            if (exploder == null || !exploder.IsFusing)
                 Attack();
-                break;
-            case ZombieState.Investigate:
-                anim.SetBool("isWalking", true);
-                break;
-            case ZombieState.Search:
-                SearchArea();
-                break;
+            variant?.OnAttacking();
+        }
+        else if (distanceToPlayer <= detectionRange)
+        {
+            ChasePlayer();
+            variant?.OnChasing();
+        }
+        else
+        {
+            Idle();
+            variant?.OnIdle();
         }
     }
 
@@ -188,7 +113,8 @@ public class ZombieController : MonoBehaviour
     void ChasePlayer()
     {
         anim.SetBool("isWalking", true);
-        agent.SetDestination(player.position);
+        if (agent.isActiveAndEnabled)
+            agent.SetDestination(player.position);
     }
 
     void Attack()
@@ -257,10 +183,7 @@ public class ZombieController : MonoBehaviour
 
         if (hitSounds.Length > 0 && audioSource != null)
             audioSource.PlayOneShot(hitSounds[Random.Range(0, hitSounds.Length)]);
-
-        // Notify sight system about damage
-        sight.OnDamageTaken();
-
+        variant?.OnDamaged();
         if (currentHealth <= 0f)
             Die();
     }
@@ -271,6 +194,7 @@ public class ZombieController : MonoBehaviour
         anim.SetTrigger("die");
         agent.enabled = false;
         GetComponent<Collider>().enabled = false;
+        variant?.OnDeath();
         DropLoot();
         Destroy(gameObject, 3f);
     }
