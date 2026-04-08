@@ -56,6 +56,7 @@ public class JumpingZombieBehavior : ZombieVariantBehavior
 
     IEnumerator LeapAtPlayer()
     {
+        isLeaping = true;
         nextJumpTime = Time.time + jumpCooldown;
         var agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
         var anim = GetComponent<Animator>();
@@ -63,6 +64,7 @@ public class JumpingZombieBehavior : ZombieVariantBehavior
         if (agent) agent.enabled = false;
         // jump animation
         if (anim) anim.SetTrigger("jump");
+        rb.isKinematic = false;
         // jump toward player with arc
         Vector3 dir = (player.position - transform.position).normalized;
         rb.linearVelocity = Vector3.zero;
@@ -88,6 +90,8 @@ public class JumpingZombieBehavior : ZombieVariantBehavior
         }
         if (agent) agent.enabled = true;
         isLeaping = false;
+        rb.isKinematic = true;
+        rb.linearVelocity = Vector3.zero;
     }
 
     bool IsGrounded()
