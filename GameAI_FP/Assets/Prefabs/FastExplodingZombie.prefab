@@ -324,10 +324,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FastExplodingZombieBehavior
   fastMoveSpeed: 5
   fuseRange: 3
-  fuseTime: 2
   explosionRadius: 2
   explosionDamage: 80
   explosionVFXPrefab: {fileID: 0}
+  fuseLitClip: {fileID: 8300000, guid: 039592cc31f4b4fa2a9daa9dc2e642ed, type: 3}
+  fuseCountdownClip: {fileID: 8300000, guid: 44f6bf940a64d47c28b243b1cee990fb, type: 3}
+  explosionClip: {fileID: 8300000, guid: 2be1a03d5623540449caf1981c8b19c7, type: 3}
 --- !u!195 &-8786842260524553807
 NavMeshAgent:
   m_ObjectHideFlags: 0
