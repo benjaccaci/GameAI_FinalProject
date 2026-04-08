@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class StartScreenManager : MonoBehaviour
+public class MusicPlayer : MonoBehaviour
 {
     public AudioClip audioClip;
     private AudioSource audioSource;
@@ -18,13 +18,5 @@ public class StartScreenManager : MonoBehaviour
     void Update()
     {
         
-    }
-
-    public void StartGame() {
-        UnityEngine.SceneManagement.SceneManager.LoadScene("MainLevel");
-    }
-
-    public void QuitGame() {
-        Application.Quit();
     }
 }
