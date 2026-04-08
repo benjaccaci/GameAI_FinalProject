@@ -97,6 +97,8 @@ public class FastExplodingZombieBehavior : ZombieVariantBehavior
         if (explosionVFXPrefab) {
             GameObject vfx = Instantiate(explosionVFXPrefab, transform.position + Vector3.up * 1f, Quaternion.identity);
             vfx.transform.localScale = Vector3.one * 2f;
+            // keep vfx alive
+            Destroy(vfx, 3f);
         }
         // player takes damage if in the radius
         Collider[] hits = Physics.OverlapSphere(transform.position, explosionRadius);
@@ -116,7 +118,7 @@ public class FastExplodingZombieBehavior : ZombieVariantBehavior
         var agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
         if (agent) agent.enabled = false;
         GetComponent<Collider>().enabled = false;
-        Destroy(gameObject, 0.5f);
+        Destroy(gameObject, 0.1f);
     }
 
     public override void OnDeath()
