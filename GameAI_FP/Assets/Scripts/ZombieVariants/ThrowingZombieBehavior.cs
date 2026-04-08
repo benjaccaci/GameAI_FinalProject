@@ -83,18 +83,20 @@ public class ThrowingZombieBehavior : ZombieVariantBehavior
         nextThrowTime = Time.time + throwCooldown;
         Transform origin = throwOrigin != null ? throwOrigin : transform;
         GameObject proj = Instantiate(projectilePrefab, origin.position, Quaternion.identity);
+        // ignore collision with the zombie
+        Physics.IgnoreCollision(proj.GetComponent<Collider>(), GetComponent<Collider>());
         // aim at player
         Vector3 targetPos = player.position + Vector3.up * 0.5f;
         Vector3 dir = (targetPos - origin.position).normalized;
         Rigidbody rb = proj.GetComponent<Rigidbody>();
         if (rb)
         {
-            rb.useGravity = false;
+            rb.useGravity = true;
             rb.AddForce(dir * throwForce, ForceMode.Impulse);
         }
         // damage is passed to projectile (if it has damage script)
-        ZombieProjectile zp = proj.GetComponent<ZombieProjectile>();
-        if (zp != null) zp.damage = projectileDamage;
+        MolotovProjectile mp = proj.GetComponent<MolotovProjectile>();
+        if (mp != null) mp.damage = projectileDamage;
     }
 
     void OnDrawGizmosSelected()

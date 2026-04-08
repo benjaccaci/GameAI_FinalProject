@@ -11,7 +11,8 @@ public class FastExplodingZombieBehavior : ZombieVariantBehavior
     // range where the fuse of the explosion happens (like when the explosion starts happen)
     public float fuseRange = 3f;
     // time it takes for the zombie to explode after fuse is lit
-    public float fuseTime = 2f;
+    private float fuseTime = 2f;
+    
     // radius of damage
     public float explosionRadius = 5f;
     // amount of damage dealt
@@ -23,16 +24,28 @@ public class FastExplodingZombieBehavior : ZombieVariantBehavior
     private Transform player;
     public bool IsFusing => fuseStarted;
 
+    [Header("Audio")]
+    public AudioClip fuseLitClip;
+    public AudioClip fuseCountdownClip;
+    public AudioClip explosionClip;
+    private AudioSource audioSource;
+
+
 
     protected override void Awake()
     {
         base.Awake();
         Debug.Log("FastExplodingZombie spawned");
+        audioSource = gameObject.AddComponent<AudioSource>();
+        audioSource.spatialBlend = 1f;
+        audioSource.playOnAwake = false;
     }
 
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;
+        if (fuseCountdownClip != null)
+            fuseTime = fuseCountdownClip.length;
         // apply the faster speed to the nav mesh agent
         var agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
         if (agent) agent.speed = fastMoveSpeed;
@@ -59,7 +72,20 @@ public class FastExplodingZombieBehavior : ZombieVariantBehavior
     {
         fuseStarted = true;
         Debug.Log(gameObject.name + "fuse lit");
-        // this would be a good place for a beep beep beep or something for the zombie before it explodes or like minecraft creeper (for polishing tomorrow)
+        // fuse lit sound for 1.5 seconds
+        if (fuseLitClip != null)
+        {
+            audioSource.clip = fuseLitClip;
+            audioSource.Play();
+        }
+        yield return new WaitForSeconds(1.5f);
+        audioSource.Stop();
+        // fuse countdown sound, same amount of time as the countdown
+        if (fuseCountdownClip != null)
+        {
+            audioSource.clip = fuseCountdownClip;
+            audioSource.Play();
+        }
         yield return new WaitForSeconds(fuseTime);
         Explode();
     }
@@ -68,8 +94,10 @@ public class FastExplodingZombieBehavior : ZombieVariantBehavior
     {
         if (hasExploded) return;
         hasExploded = true;
-        if (explosionVFXPrefab)
-            Instantiate(explosionVFXPrefab, transform.position, Quaternion.identity);
+        if (explosionVFXPrefab) {
+            GameObject vfx = Instantiate(explosionVFXPrefab, transform.position + Vector3.up * 1f, Quaternion.identity);
+            vfx.transform.localScale = Vector3.one * 2f;
+        }
         // player takes damage if in the radius
         Collider[] hits = Physics.OverlapSphere(transform.position, explosionRadius);
         foreach (var hit in hits)
@@ -81,6 +109,9 @@ public class FastExplodingZombieBehavior : ZombieVariantBehavior
             }
         }
         Debug.Log(gameObject.name + "exploded");
+        // explosion sound effect
+        if (explosionClip != null)
+            AudioSource.PlayClipAtPoint(explosionClip, transform.position);
         // kill zombie
         var agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
         if (agent) agent.enabled = false;

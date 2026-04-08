@@ -434,8 +434,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ThrowingZombieBehavior
   preferredMinRange: 5
   preferredMaxRange: 12
-  projectilePrefab: {fileID: 604222228322335557, guid: c330c00fdb10941b3b2ae71c1e6c675c, type: 3}
+  projectilePrefab: {fileID: 7143315851301165739, guid: 8694b3ffd2d7d4d799fa4c9db871a8e7, type: 3}
   throwOrigin: {fileID: 6413537417644788932}
-  throwForce: 15
+  throwForce: 20
   throwCooldown: 2.5
   projectileDamage: 25
