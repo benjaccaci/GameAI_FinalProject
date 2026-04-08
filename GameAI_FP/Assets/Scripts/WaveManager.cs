@@ -7,7 +7,7 @@ public class WaveManager : MonoBehaviour
     [System.Serializable]
     public class Wave {
         public GameObject[] enemyPrefabs;
-        public int enemyCountPerPrefab = 5;
+        public int[] enemyCountPerPrefab;
         public float spawnInterval = 1f;
         public float waveDuration = 60f;
     }
@@ -97,7 +97,7 @@ public class WaveManager : MonoBehaviour
 
     IEnumerator SpawnEnemies(Wave wave) {
         for (int j = 0; j < wave.enemyPrefabs.Length; j++) {
-            for (int i = 0; i < wave.enemyCountPerPrefab; i++) {
+            for (int i = 0; i < wave.enemyCountPerPrefab[j]; i++) {
                 Spawner spawner = zombieSpawners[Random.Range(0, zombieSpawners.Length)];
                 GameObject enemyPrefab = wave.enemyPrefabs[j];
                 SpawnEnemy(enemyPrefab, spawner.gameObject);
