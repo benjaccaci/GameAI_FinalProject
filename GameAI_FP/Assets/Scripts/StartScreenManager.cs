@@ -13,4 +13,12 @@ public class StartScreenManager : MonoBehaviour
     {
         
     }
+
+    public void StartGame() {
+        UnityEngine.SceneManagement.SceneManager.LoadScene("MainLevel");
+    }
+
+    public void QuitGame() {
+        Application.Quit();
+    }
 }
