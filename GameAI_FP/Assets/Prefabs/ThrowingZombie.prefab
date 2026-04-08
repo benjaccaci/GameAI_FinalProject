@@ -436,6 +436,6 @@ MonoBehaviour:
   preferredMaxRange: 12
   projectilePrefab: {fileID: 7143315851301165739, guid: 8694b3ffd2d7d4d799fa4c9db871a8e7, type: 3}
   throwOrigin: {fileID: 6413537417644788932}
-  throwForce: 15
+  throwForce: 20
   throwCooldown: 2.5
   projectileDamage: 25
