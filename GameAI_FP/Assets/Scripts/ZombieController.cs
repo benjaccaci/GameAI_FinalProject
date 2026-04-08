@@ -35,6 +35,7 @@ public class ZombieController : MonoBehaviour
     private float nextAttackTime = 0f;
     private bool isDead = false;
     private bool isJumping = false;
+    private ZombieVariantBehavior variant;
     
     void Start()
     {
@@ -45,6 +46,8 @@ public class ZombieController : MonoBehaviour
 
         agent.speed = moveSpeed;
         agent.stoppingDistance = attackRange;
+
+        variant = GetComponent<ZombieVariantBehavior>();
     }
 
     void Update()
@@ -63,15 +66,20 @@ public class ZombieController : MonoBehaviour
 
         if (distanceToPlayer <= attackRange)
         {
-            Attack();
+            FastExplodingZombieBehavior exploder = variant as FastExplodingZombieBehavior;
+            if (exploder == null || !exploder.IsFusing)
+                Attack();
+            variant?.OnAttacking();
         }
         else if (distanceToPlayer <= detectionRange)
         {
             ChasePlayer();
+            variant?.OnChasing();
         }
         else
         {
             Idle();
+            variant?.OnIdle();
         }
     }
 
@@ -84,7 +92,8 @@ public class ZombieController : MonoBehaviour
     void ChasePlayer()
     {
         anim.SetBool("isWalking", true);
-        agent.SetDestination(player.position);
+        if (agent.isActiveAndEnabled)
+            agent.SetDestination(player.position);
     }
 
     void Attack()
@@ -141,7 +150,7 @@ public class ZombieController : MonoBehaviour
 
         if (hitSounds.Length > 0 && audioSource != null)
             audioSource.PlayOneShot(hitSounds[Random.Range(0, hitSounds.Length)]);
-
+        variant?.OnDamaged();
         if (currentHealth <= 0f)
             Die();
     }
@@ -152,6 +161,7 @@ public class ZombieController : MonoBehaviour
         anim.SetTrigger("die");
         agent.enabled = false;
         GetComponent<Collider>().enabled = false;
+        variant?.OnDeath();
         DropLoot();
         Destroy(gameObject, 3f);
     }
