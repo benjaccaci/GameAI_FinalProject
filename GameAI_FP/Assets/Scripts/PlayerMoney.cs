@@ -29,4 +29,15 @@ public class PlayerMoney : MonoBehaviour
             moneyUI.text = currentMoney.ToString();
         }  
     }
+    public bool SpendMoney(int amount)
+    {
+        if (currentMoney >= amount)
+        {
+            currentMoney -= amount;
+            if (moneyUI != null)
+                moneyUI.text = currentMoney.ToString();
+            return true;
+        }
+        return false;
+    }
 }

@@ -36,6 +36,9 @@ public class GunScript : MonoBehaviour
     public int pelletCount = 8;
     public float shotgunSpread = 0.1f;
 
+    [Header("Shotgun Reload")]
+    public float shellReloadTime = 0.5f;
+
     [Header("Recoil")]
     public float recoilAmount = 3f;
     public float returnSpeed = 8f;
@@ -62,6 +65,11 @@ public class GunScript : MonoBehaviour
     public AudioSource gunShotSound;
     public ParticleSystem muzzleFlash;
 
+    [Header("Bullet Trail")]
+    public bool showBulletTrail = true;
+    public float trailDuration = 0.1f;
+    public Color trailColor = Color.red;
+
     private Quaternion originalRotation;
     private float nextFireTime = 0f;
     private float recoilTimer = 0f;
@@ -87,16 +95,21 @@ public class GunScript : MonoBehaviour
         mouseLook = playerCamera.GetComponentInParent<MouseLook>();
     }
 
+    void OnEnable()
+    {
+        if (gunModel != null)
+            originalRotation = gunModel.localRotation;
+    }
+
     void Update()
     {
         if (!isEquipped) return;
 
-        if (isEquipped && ammoCountUI != null && reserveAmmoUI != null)
-            {
-                ammoCountUI.text = currentAmmo.ToString();
-                reserveAmmoUI.text = reserveAmmo.ToString();
-            }
-
+        if (ammoCountUI != null && reserveAmmoUI != null)
+        {
+            ammoCountUI.text = currentAmmo.ToString();
+            reserveAmmoUI.text = reserveAmmo.ToString();
+        }
 
         if (isReloading)
         {
@@ -145,13 +158,7 @@ public class GunScript : MonoBehaviour
             nextFireTime = Time.time + fireRate;
             currentAmmo--;
 
-            if (!isEquipped)
-            {
-                ammoCountUI.text = "00";
-                reserveAmmoUI.text = "00";
-            }
-
-            if (isEquipped && ammoCountUI != null && reserveAmmoUI != null)
+            if (ammoCountUI != null && reserveAmmoUI != null)
             {
                 ammoCountUI.text = currentAmmo.ToString();
                 reserveAmmoUI.text = reserveAmmo.ToString();
@@ -159,8 +166,8 @@ public class GunScript : MonoBehaviour
 
             Debug.Log("Ammo: " + currentAmmo + "/" + magSize + " | Reserve: " + reserveAmmo);
 
-            // Snap to recoil position instantly
-            gunModel.localRotation = originalRotation * Quaternion.Euler(-recoilAmount, Random.Range(-0.5f, 0.5f), 0f);
+            // Snap to recoil — only rotate on local X axis
+            gunModel.localRotation = originalRotation * Quaternion.Euler(-recoilAmount, 0f, 0f);
 
             if (gunShotSound != null)
                 gunShotSound.Play();
@@ -203,34 +210,67 @@ public class GunScript : MonoBehaviour
         reloadReturning = false;
         Debug.Log("Reloading...");
 
-        if (reloadSound != null)
-        {
-            reloadSound.Play();
-            float clipLength = reloadSound.clip.length;
-            float returnTime = 0.3f;
-
-            yield return new WaitForSeconds(clipLength - returnTime);
-
-            reloadReturning = true;
-            yield return new WaitForSeconds(returnTime);
-        }
-        else
-        {
-            yield return new WaitForSeconds(1.2f);
-            reloadReturning = true;
-            yield return new WaitForSeconds(0.3f);
-        }
-
         int ammoNeeded = magSize - currentAmmo;
         int ammoToReload = Mathf.Min(ammoNeeded, reserveAmmo);
 
-        currentAmmo += ammoToReload;
-        reserveAmmo -= ammoToReload;
-
-        if (ammoCountUI != null)
+        if (isShotgun)
         {
-            ammoCountUI.text = currentAmmo.ToString();
-            reserveAmmoUI.text = reserveAmmo.ToString();
+            float totalReloadTime = ammoToReload * shellReloadTime;
+
+            if (reloadSound != null)
+            {
+                reloadSound.Play();
+
+                float returnTime = 0.3f;
+                yield return new WaitForSeconds(totalReloadTime - returnTime);
+
+                reloadReturning = true;
+                yield return new WaitForSeconds(returnTime);
+
+                reloadSound.Stop();
+            }
+            else
+            {
+                yield return new WaitForSeconds(totalReloadTime);
+            }
+
+            currentAmmo += ammoToReload;
+            reserveAmmo -= ammoToReload;
+
+            if (ammoCountUI != null && reserveAmmoUI != null)
+            {
+                ammoCountUI.text = currentAmmo.ToString();
+                reserveAmmoUI.text = reserveAmmo.ToString();
+            }
+        }
+        else
+        {
+            if (reloadSound != null)
+            {
+                reloadSound.Play();
+                float clipLength = reloadSound.clip.length;
+                float returnTime = 0.3f;
+
+                yield return new WaitForSeconds(clipLength - returnTime);
+
+                reloadReturning = true;
+                yield return new WaitForSeconds(returnTime);
+            }
+            else
+            {
+                yield return new WaitForSeconds(1.2f);
+                reloadReturning = true;
+                yield return new WaitForSeconds(0.3f);
+            }
+
+            currentAmmo += ammoToReload;
+            reserveAmmo -= ammoToReload;
+
+            if (ammoCountUI != null && reserveAmmoUI != null)
+            {
+                ammoCountUI.text = currentAmmo.ToString();
+                reserveAmmoUI.text = reserveAmmo.ToString();
+            }
         }
 
         Debug.Log("Reloaded! Ammo: " + currentAmmo + "/" + magSize + " | Reserve: " + reserveAmmo);
@@ -271,8 +311,6 @@ public class GunScript : MonoBehaviour
             if (zombie != null)
                 zombie.TakeDamage(damage);
         }
-
-        DrawTrail(ray.origin, endPoint);
     }
 
     public void AddAmmo(int amount)
@@ -288,16 +326,19 @@ public class GunScript : MonoBehaviour
         }
     }
 
-    void DrawTrail(Vector3 start, Vector3 end)
+    IEnumerator DrawTrail(Vector3 start, Vector3 end)
     {
-        // GameObject trail = new GameObject("BulletTrail");
-        // LineRenderer lr = trail.AddComponent<LineRenderer>();
-        // lr.startWidth = 0.01f;
-        // lr.endWidth = 0.01f;
-        // lr.positionCount = 2;
-        // lr.SetPosition(0, start);
-        // lr.SetPosition(1, end);
-        // lr.material = new Material(Shader.Find("Unlit/Color"));
-        // lr.material.color = Color.red;
+    GameObject trail = new GameObject("BulletTrail");
+    LineRenderer lr = trail.AddComponent<LineRenderer>();
+    lr.startWidth = 0.01f;
+    lr.endWidth = 0.01f;
+    lr.positionCount = 2;
+    lr.SetPosition(0, start);
+    lr.SetPosition(1, end);
+    lr.material = new Material(Shader.Find("Unlit/Color"));
+    lr.material.color = trailColor;
+
+    yield return new WaitForSeconds(trailDuration);
+    Destroy(trail);
     }
 }
