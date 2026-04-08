@@ -36530,36 +36530,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   waves:
   - enemyPrefabs:
-    - {fileID: 7664173058970473248, guid: b6824ae61b0424075ae623265b2337e2, type: 3}
-    enemyCount: 1
-    spawnInterval: 1
-    waveDuration: 60
-  - enemyPrefabs:
-    - {fileID: 7664173058970473248, guid: 655c3bb4f3a664990871ad492eeb2ca8, type: 3}
-    enemyCount: 1
-    spawnInterval: 1
-    waveDuration: 60
-  - enemyPrefabs:
-    - {fileID: 7664173058970473248, guid: be7e8a5f9b59e4203855f6074d868419, type: 3}
-    enemyCount: 1
-    spawnInterval: 1
-    waveDuration: 60
-  - enemyPrefabs:
-    - {fileID: 7664173058970473248, guid: b6824ae61b0424075ae623265b2337e2, type: 3}
-    enemyCount: 1
-    spawnInterval: 1
-    waveDuration: 60
-  - enemyPrefabs:
-    - {fileID: 7664173058970473248, guid: b6824ae61b0424075ae623265b2337e2, type: 3}
-    enemyCount: 1
-    spawnInterval: 1
-    waveDuration: 60
-  - enemyPrefabs:
-    - {fileID: 7664173058970473248, guid: b6824ae61b0424075ae623265b2337e2, type: 3}
-    - {fileID: 7664173058970473248, guid: b6824ae61b0424075ae623265b2337e2, type: 3}
-    - {fileID: 7664173058970473248, guid: b6824ae61b0424075ae623265b2337e2, type: 3}
-    - {fileID: 7664173058970473248, guid: b6824ae61b0424075ae623265b2337e2, type: 3}
-    enemyCount: 1
+    - {fileID: 7664173058970473248, guid: 48b65aecfccb94ab79d304bb8d9c88a7, type: 3}
+    - {fileID: 7664173058970473248, guid: f34b947a0a1034e03819ae62f538c712, type: 3}
+    enemyCountPerPrefab: 1
     spawnInterval: 1
     waveDuration: 60
   timeBetweenWaves: 5
