@@ -36,7 +36,7 @@ public class ZombieController : MonoBehaviour
     public GameObject coinPrefab;
 
     // --- State ---
-    public ZombieState CurrentState { get; private set; } = ZombieState.Investigate;
+    public ZombieState CurrentState { get; private set; } = ZombieState.Idle;
 
     private Animator anim;
     private NavMeshAgent agent;
@@ -62,10 +62,11 @@ public class ZombieController : MonoBehaviour
 
         agent.speed = moveSpeed;
         agent.stoppingDistance = attackRange;
-        
-        agent.destination = player.position;
 
         variant = GetComponent<ZombieVariantBehavior>();
+
+        // Give the zombie an initial alert toward the player so it doesn't idle on spawn
+        sight.AlertToPosition(player.position);
     }
 
     void Update()

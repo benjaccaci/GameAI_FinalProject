@@ -824,9 +824,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 061c753765d23564ca2a96a06b175c50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ZombieController
-  moveSpeed: 0.75
   maxHealth: 100
-  attackRange: 2
+  attackRange: 2.5
   attackCooldown: 1.5
   attackDamage: 20
   audioSource: {fileID: 9101505391618441538}

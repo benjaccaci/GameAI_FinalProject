@@ -170,6 +170,15 @@ public class ZombieSight : MonoBehaviour
     }
 
     /// <summary>
+    /// Gives the zombie an initial alert toward a position so it doesn't idle on spawn.
+    /// </summary>
+    public void AlertToPosition(Vector3 position)
+    {
+        LastKnownPosition = position;
+        IsAlerted = true;
+    }
+
+    /// <summary>
     /// Called by ZombieController when returning to Idle so the zombie
     /// can respond to future alerts.
     /// </summary>
