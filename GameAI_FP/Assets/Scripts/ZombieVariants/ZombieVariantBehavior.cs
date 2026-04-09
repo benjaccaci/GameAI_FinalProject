@@ -11,6 +11,10 @@ public abstract class ZombieVariantBehavior : MonoBehaviour
         if (controller == null)
             Debug.LogWarning(gameObject.name + "ZombieVariantBehavior requires a ZombieController on the game object");
     }
+
+    public virtual bool OverridesChase() => false;
+    public virtual bool OverridesAttack() => false;
+    
     // idle zombie
     public virtual void OnIdle() { }
     // chasing player

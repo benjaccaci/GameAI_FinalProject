@@ -88,13 +88,20 @@ public class ZombieController : MonoBehaviour
         if (distanceToPlayer <= attackRange)
         {
             FastExplodingZombieBehavior exploder = variant as FastExplodingZombieBehavior;
-            if (exploder == null || !exploder.IsFusing)
-                Attack();
+            if (exploder == null || !exploder.IsFusing) {
+                if (variant == null || !variant.OverridesAttack()) {
+                    Attack();
+                }
+            }
             variant?.OnAttacking();
         }
         else if (distanceToPlayer <= detectionRange)
         {
-            ChasePlayer();
+            if (variant == null || !variant.OverridesChase())
+            {
+                ChasePlayer();
+            }
+
             variant?.OnChasing();
         }
         else

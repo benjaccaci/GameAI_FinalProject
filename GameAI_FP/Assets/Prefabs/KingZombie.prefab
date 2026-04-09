@@ -13,6 +13,18 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2100000, guid: 2fd8216eec6d74c4d8a80d257f6a2fff, type: 2}
     - target: {fileID: -8679921383154817045, guid: cb0fd0f4d34cdf9419e88fd5d7c34b95, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: cb0fd0f4d34cdf9419e88fd5d7c34b95, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: cb0fd0f4d34cdf9419e88fd5d7c34b95, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: cb0fd0f4d34cdf9419e88fd5d7c34b95, type: 3}
       propertyPath: m_LocalPosition.x
       value: -1.7935697
       objectReference: {fileID: 0}
@@ -52,6 +64,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: cb0fd0f4d34cdf9419e88fd5d7c34b95, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: -4999978460880376258, guid: cb0fd0f4d34cdf9419e88fd5d7c34b95, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -70,7 +86,7 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 2fd8216eec6d74c4d8a80d257f6a2fff, type: 2}
     - target: {fileID: 919132149155446097, guid: cb0fd0f4d34cdf9419e88fd5d7c34b95, type: 3}
       propertyPath: m_Name
-      value: JumpingZombie
+      value: KingZombie
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: cb0fd0f4d34cdf9419e88fd5d7c34b95, type: 3}
       propertyPath: m_TagString
@@ -111,7 +127,7 @@ PrefabInstance:
       addedObject: {fileID: 1579349620644740803}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: cb0fd0f4d34cdf9419e88fd5d7c34b95, type: 3}
       insertIndex: -1
-      addedObject: {fileID: -1643321682857908480}
+      addedObject: {fileID: 987813739503426814}
   m_SourcePrefab: {fileID: 100100000, guid: cb0fd0f4d34cdf9419e88fd5d7c34b95, type: 3}
 --- !u!1 &7664173058970473248 stripped
 GameObject:
@@ -152,11 +168,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 061c753765d23564ca2a96a06b175c50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ZombieController
-  moveSpeed: 1.5
-  maxHealth: 100
-  attackRange: 2.5
+  moveSpeed: 0.5
+  maxHealth: 500
+  attackRange: 2
   attackCooldown: 1.5
-  attackDamage: 20
+  attackDamage: 50
   detectionRange: 25
   audioSource: {fileID: 9101505391618441538}
   hitSounds:
@@ -288,7 +304,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 1
   m_Interpolate: 0
-  m_Constraints: 112
+  m_Constraints: 0
   m_CollisionDetection: 0
 --- !u!195 &-5626367343654367574
 NavMeshAgent:
@@ -381,7 +397,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &-1643321682857908480
+--- !u!114 &987813739503426814
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -390,10 +406,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 7664173058970473248}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 65c2c00a7fb354e30b89c20dbeb7089f, type: 3}
+  m_Script: {fileID: 11500000, guid: c56f74da003f140a59e3d6d9423dea30, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::JumpingZombieBehavior
-  jumpRange: 4
-  jumpForce: 8
-  jumpCooldown: 3
-  jumpDamage: 30
+  m_EditorClassIdentifier: Assembly-CSharp::KingZombieBehavior
+  startingHealth: 500
+  preferredDistance: 18
+  retreatTriggerDistance: 12

@@ -56,7 +56,12 @@ public class PlayerHealth : MonoBehaviour
     {
         Debug.Log("Player died");
         // Destroy(gameObject);
-        levelManager.DeathScreen();
+        Invoke("ShowDeathScreen", 0.5f);
+    }
+
+    void ShowDeathScreen()
+    {
+    levelManager.DeathScreen();
     }
 
     void UpdateSlider() {
