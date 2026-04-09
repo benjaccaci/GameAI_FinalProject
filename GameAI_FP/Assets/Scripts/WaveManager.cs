@@ -71,7 +71,7 @@ public class WaveManager : MonoBehaviour
             StartCoroutine(ShowNewWaveText());
 
             // Spawn enemies in the wave
-            yield return StartCoroutine(SpawnEnemies(waves[currentWaveIndex]));
+            yield return StartCoroutine(SpawnEnemies(waves[currentWaveIndex], currentWaveIndex));
             // Wait until all enemies are dead to continue
             yield return new WaitUntil(() => GameObject.FindGameObjectsWithTag("Enemy").Length == 0 || waveTimer <= 0f);
 
@@ -95,25 +95,33 @@ public class WaveManager : MonoBehaviour
         }
     }
 
-    IEnumerator SpawnEnemies(Wave wave) {
-        for (int j = 0; j < wave.enemyPrefabs.Length; j++) {
-            for (int i = 0; i < wave.enemyCountPerPrefab[j]; i++) {
+    IEnumerator SpawnEnemies(Wave wave, int waveIndex)
+    {
+        for (int j = 0; j < wave.enemyPrefabs.Length; j++)
+        {
+            int count = (j < wave.enemyCountPerPrefab.Length) ? wave.enemyCountPerPrefab[j] : 1;
+            for (int i = 0; i < count; i++)
+            {
                 Spawner spawner = zombieSpawners[Random.Range(0, zombieSpawners.Length)];
                 GameObject enemyPrefab = wave.enemyPrefabs[j];
-                SpawnEnemy(enemyPrefab, spawner.gameObject);
+                SpawnEnemy(enemyPrefab, spawner.gameObject, waveIndex);
                 yield return new WaitForSeconds(wave.spawnInterval);
             }
         }
     }
 
-    void SpawnEnemy(GameObject enemyPrefab, GameObject spawner) {
-        Instantiate(enemyPrefab, spawner.transform.position, spawner.transform.rotation);
+    void SpawnEnemy(GameObject enemyPrefab, GameObject spawner, int waveIndex) {
+        GameObject enemy = Instantiate(enemyPrefab, spawner.transform.position, spawner.transform.rotation);
+        ZombieSight sight = enemy.GetComponent<ZombieSight>();
+        if (sight != null)
+        {
+            sight.waveId = waveIndex;
+        }
     }
-
 
     void UpdateWaveText() {
         if (waveText) {
-            waveText.text = "Wave: " + (currentWaveIndex + 1).ToString() + " / " + waves.Length;
+            waveText.text = "Wave: " + (currentWaveIndex + 1) + " / " + waves.Length;
         }
     }
 

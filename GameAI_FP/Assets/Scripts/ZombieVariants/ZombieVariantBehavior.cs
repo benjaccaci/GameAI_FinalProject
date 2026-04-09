@@ -14,13 +14,19 @@ public abstract class ZombieVariantBehavior : MonoBehaviour
 
     public virtual bool OverridesChase() => false;
     public virtual bool OverridesAttack() => false;
-    
+    public virtual bool OverridesInvestigate() => false;
+    public virtual bool OverridesSearch() => false;
+
     // idle zombie
     public virtual void OnIdle() { }
     // chasing player
     public virtual void OnChasing() { }
     // attacking player
     public virtual void OnAttacking() { }
+    // investigating last known position
+    public virtual void OnInvestigating() { }
+    // searching area after arriving at last known position
+    public virtual void OnSearching() { }
     // zombie dies
     public virtual void OnDeath() { }
     // zombie takes damage
