@@ -36,7 +36,7 @@ public class ZombieController : MonoBehaviour
     public GameObject coinPrefab;
 
     // --- State ---
-    public ZombieState CurrentState { get; private set; } = ZombieState.Idle;
+    public ZombieState CurrentState { get; private set; } = ZombieState.Investigate;
 
     private Animator anim;
     private NavMeshAgent agent;
@@ -62,6 +62,8 @@ public class ZombieController : MonoBehaviour
 
         agent.speed = moveSpeed;
         agent.stoppingDistance = attackRange;
+        
+        agent.destination = player.position;
 
         variant = GetComponent<ZombieVariantBehavior>();
     }
@@ -124,7 +126,6 @@ public class ZombieController : MonoBehaviour
             {
                 TransitionTo(ZombieState.Idle);
             }
-            return;
         }
     }
 
@@ -170,9 +171,9 @@ public class ZombieController : MonoBehaviour
                 break;
             case ZombieState.Chase:
                 FastExplodingZombieBehavior exploder = variant as FastExplodingZombieBehavior;
-                if (exploder == null || !exploder.IsFusing)
+                if (!exploder || !exploder.IsFusing)
                 {
-                    if (variant == null || !variant.OverridesChase())
+                    if (!variant || !variant.OverridesChase())
                     {
                         ChasePlayer();
                     }
@@ -181,9 +182,9 @@ public class ZombieController : MonoBehaviour
                 break;
             case ZombieState.Attack:
                 FastExplodingZombieBehavior attackExploder = variant as FastExplodingZombieBehavior;
-                if (attackExploder == null || !attackExploder.IsFusing)
+                if (!attackExploder|| !attackExploder.IsFusing)
                 {
-                    if (variant == null || !variant.OverridesAttack())
+                    if (!variant || !variant.OverridesAttack())
                     {
                         Attack();
                     }
@@ -191,14 +192,14 @@ public class ZombieController : MonoBehaviour
                 variant?.OnAttacking();
                 break;
             case ZombieState.Investigate:
-                if (variant == null || !variant.OverridesInvestigate())
+                if (!variant || !variant.OverridesInvestigate())
                 {
                     Investigate();
                 }
                 variant?.OnInvestigating();
                 break;
             case ZombieState.Search:
-                if (variant == null || !variant.OverridesSearch())
+                if (!variant || !variant.OverridesSearch())
                 {
                     SearchArea();
                 }
@@ -246,7 +247,8 @@ public class ZombieController : MonoBehaviour
     {
         anim.SetBool("isWalking", true);
 
-        if (!hasSearchDestination || (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance))
+        bool isStationary = !agent.pathPending && agent.remainingDistance <= agent.stoppingDistance;
+        if (!hasSearchDestination || isStationary)
         {
             Vector3 wanderPoint = sight.GetSearchWanderPoint();
             agent.SetDestination(wanderPoint);

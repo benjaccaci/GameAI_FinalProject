@@ -107,7 +107,7 @@ public class ZombieSight : MonoBehaviour
     /// Called by ZombieController when this zombie takes damage.
     /// Gains a one-time snapshot of the player's current position.
     /// Starts a 5-second timer to alert wave-mates if it survives.
-    /// </summary>
+    /// </summary>  
     public void OnDamageTaken()
     {
         if (player == null) return;
