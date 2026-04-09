@@ -125,7 +125,7 @@ Animator:
   m_GameObject: {fileID: 7664173058970473248}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: a4ea1855dccf3994daa2cb7a8291b886, type: 2}
+  m_Controller: {fileID: 9100000, guid: 0fb47fa92e5967742a469ce4ea5c592d, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -322,7 +322,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 704f1b7a0091242d3a21d395bdc9fb93, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FastExplodingZombieBehavior
-  fastMoveSpeed: 5
+  fastMoveSpeed: 10
   fuseRange: 3
   explosionRadius: 2
   explosionDamage: 80
