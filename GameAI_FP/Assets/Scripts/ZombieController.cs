@@ -1,8 +1,6 @@
-using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
-using System.Collections;
 using Random = UnityEngine.Random;
 
 public class ZombieController : MonoBehaviour
@@ -27,9 +25,6 @@ public class ZombieController : MonoBehaviour
     public float attackRange = 2f;
     public float attackCooldown = 1.5f;
     public float attackDamage = 20f;
-
-    [Header("Detection")]
-    public float detectionRange = 15f;
 
     [Header("Sounds")]
     public AudioSource audioSource;
@@ -56,7 +51,7 @@ public class ZombieController : MonoBehaviour
     private bool hasSearchDestination = false;
 
     private ZombieVariantBehavior variant;
-    
+
     void Start()
     {
         anim = GetComponent<Animator>();
@@ -83,31 +78,132 @@ public class ZombieController : MonoBehaviour
 
         if (isJumping) return;
 
-        float distanceToPlayer = Vector3.Distance(transform.position, player.position);
+        UpdateState();
+        ExecuteState();
+    }
 
-        if (distanceToPlayer <= attackRange)
+    void UpdateState()
+    {
+        // Sight-based transitions take priority
+        if (sight.HasTarget)
         {
-            FastExplodingZombieBehavior exploder = variant as FastExplodingZombieBehavior;
-            if (exploder == null || !exploder.IsFusing) {
-                if (variant == null || !variant.OverridesAttack()) {
-                    Attack();
-                }
-            }
-            variant?.OnAttacking();
-        }
-        else if (distanceToPlayer <= detectionRange)
-        {
-            if (variant == null || !variant.OverridesChase())
+            float distanceToPlayer = Vector3.Distance(transform.position, player.position);
+            if (distanceToPlayer <= attackRange)
             {
-                ChasePlayer();
+                TransitionTo(ZombieState.Attack);
             }
-
-            variant?.OnChasing();
+            else
+            {
+                TransitionTo(ZombieState.Chase);
+            }
+            return;
         }
-        else
+
+        // If we just lost the target or received an alert, investigate
+        if (sight.IsAlerted && CurrentState != ZombieState.Investigate && CurrentState != ZombieState.Search)
         {
-            Idle();
-            variant?.OnIdle();
+            TransitionTo(ZombieState.Investigate);
+            return;
+        }
+
+        // If investigating and arrived at destination
+        if (CurrentState == ZombieState.Investigate)
+        {
+            if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
+            {
+                TransitionTo(ZombieState.Search);
+            }
+            return;
+        }
+
+        // If searching and timer expired
+        if (CurrentState == ZombieState.Search)
+        {
+            searchTimer -= Time.deltaTime;
+            if (searchTimer <= 0f)
+            {
+                TransitionTo(ZombieState.Idle);
+            }
+            return;
+        }
+    }
+
+    void TransitionTo(ZombieState newState)
+    {
+        if (CurrentState == newState) return;
+
+        // Exit current state
+        switch (CurrentState)
+        {
+            case ZombieState.Search:
+                hasSearchDestination = false;
+                break;
+        }
+
+        CurrentState = newState;
+
+        // Enter new state
+        switch (newState)
+        {
+            case ZombieState.Idle:
+                sight.ClearAlertState();
+                break;
+            case ZombieState.Investigate:
+                agent.SetDestination(sight.LastKnownPosition);
+                anim.SetBool("isWalking", true);
+                break;
+            case ZombieState.Search:
+                sight.BeginSearch();
+                searchTimer = sight.config.searchDuration;
+                hasSearchDestination = false;
+                break;
+        }
+    }
+
+    void ExecuteState()
+    {
+        switch (CurrentState)
+        {
+            case ZombieState.Idle:
+                Idle();
+                variant?.OnIdle();
+                break;
+            case ZombieState.Chase:
+                FastExplodingZombieBehavior exploder = variant as FastExplodingZombieBehavior;
+                if (exploder == null || !exploder.IsFusing)
+                {
+                    if (variant == null || !variant.OverridesChase())
+                    {
+                        ChasePlayer();
+                    }
+                }
+                variant?.OnChasing();
+                break;
+            case ZombieState.Attack:
+                FastExplodingZombieBehavior attackExploder = variant as FastExplodingZombieBehavior;
+                if (attackExploder == null || !attackExploder.IsFusing)
+                {
+                    if (variant == null || !variant.OverridesAttack())
+                    {
+                        Attack();
+                    }
+                }
+                variant?.OnAttacking();
+                break;
+            case ZombieState.Investigate:
+                if (variant == null || !variant.OverridesInvestigate())
+                {
+                    Investigate();
+                }
+                variant?.OnInvestigating();
+                break;
+            case ZombieState.Search:
+                if (variant == null || !variant.OverridesSearch())
+                {
+                    SearchArea();
+                }
+                variant?.OnSearching();
+                break;
         }
     }
 
@@ -122,6 +218,11 @@ public class ZombieController : MonoBehaviour
         anim.SetBool("isWalking", true);
         if (agent.isActiveAndEnabled)
             agent.SetDestination(player.position);
+    }
+
+    void Investigate()
+    {
+        anim.SetBool("isWalking", true);
     }
 
     void Attack()
@@ -190,7 +291,12 @@ public class ZombieController : MonoBehaviour
 
         if (hitSounds.Length > 0 && audioSource != null)
             audioSource.PlayOneShot(hitSounds[Random.Range(0, hitSounds.Length)]);
+
+        // Notify sight system about damage
+        sight.OnDamageTaken();
+
         variant?.OnDamaged();
+
         if (currentHealth <= 0f)
             Die();
     }
