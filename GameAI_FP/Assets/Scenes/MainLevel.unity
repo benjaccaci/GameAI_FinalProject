@@ -4558,6 +4558,37 @@ MonoBehaviour:
   m_SelectedFaces: 
   m_SelectedEdges: []
   m_SelectedVertices: 
+--- !u!1 &214272200
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 214272201}
+  m_Layer: 0
+  m_Name: Gap2JumpPoint2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &214272201
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 214272200}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -4.115, y: 0, z: -0.09478998}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1085640564}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &219204276
 GameObject:
   m_ObjectHideFlags: 0
@@ -12555,12 +12586,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 061c753765d23564ca2a96a06b175c50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ZombieController
-  moveSpeed: 0.75
   maxHealth: 100
   attackRange: 2
   attackCooldown: 1.5
   attackDamage: 20
-  detectionRange: 15
   audioSource: {fileID: 602395403}
   hitSounds:
   - {fileID: 8300000, guid: 71cce53943fce174680aa1cf1c102624, type: 3}
@@ -14571,12 +14600,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 061c753765d23564ca2a96a06b175c50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ZombieController
-  moveSpeed: 0.75
   maxHealth: 100
   attackRange: 2
   attackCooldown: 1.5
   attackDamage: 20
-  detectionRange: 15
   audioSource: {fileID: 724125197}
   hitSounds:
   - {fileID: 8300000, guid: 71cce53943fce174680aa1cf1c102624, type: 3}
@@ -20957,6 +20984,39 @@ Mesh:
       - serializedVersion: 1
         m_IndexStart: 0
         m_IndexCount: 0
+--- !u!1 &1085640563
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1085640564}
+  m_Layer: 0
+  m_Name: Gap2JumpPoints
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1085640564
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1085640563}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.65, y: 0.01775, z: 11.63}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1557685432}
+  - {fileID: 214272201}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1091854522
 GameObject:
   m_ObjectHideFlags: 0
@@ -37354,6 +37414,63 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 1477579823}
   m_SourcePrefab: {fileID: 100100000, guid: 9c157a0f4d6c5ab48a914987643c301c, type: 3}
+--- !u!1 &1557685431
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1557685432}
+  - component: {fileID: 1557685433}
+  m_Layer: 0
+  m_Name: Gap2JumpPoint1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1557685432
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1557685431}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 2.85, y: 0, z: -0.09478998}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1085640564}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1557685433
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1557685431}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6eeb5dc026fdf4b488bc7ae0138ab719, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshLink
+  m_SerializedVersion: 1
+  m_AgentTypeID: 0
+  m_StartPoint: {x: 0, y: 0, z: -2.5}
+  m_EndPoint: {x: 0, y: 0, z: 2.5}
+  m_StartTransform: {fileID: 1557685432}
+  m_EndTransform: {fileID: 214272201}
+  m_Activated: 1
+  m_Width: 0
+  m_CostModifier: 1
+  m_IsOverridingCost: 0
+  m_Bidirectional: 1
+  m_AutoUpdatePosition: 0
+  m_Area: 2
 --- !u!43 &1558497246
 Mesh:
   m_ObjectHideFlags: 0
@@ -53524,6 +53641,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 160750842}
     - target: {fileID: 3985777333964140279, guid: d967b2f9420054674a821f2b77e33f9d, type: 3}
+      propertyPath: playerHealth
+      value: 9999
+      objectReference: {fileID: 0}
+    - target: {fileID: 3985777333964140279, guid: d967b2f9420054674a821f2b77e33f9d, type: 3}
       propertyPath: bloodSplatterEffect
       value: 
       objectReference: {fileID: 862370254}
@@ -55316,6 +55437,7 @@ SceneRoots:
   - {fileID: 1534393141}
   - {fileID: 1263842284}
   - {fileID: 1700460004}
+  - {fileID: 1085640564}
   - {fileID: 8757382280324100311}
   - {fileID: 1137140756}
   - {fileID: 658755862}
