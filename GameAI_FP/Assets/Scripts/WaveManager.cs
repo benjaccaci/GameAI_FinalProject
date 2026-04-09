@@ -99,7 +99,8 @@ public class WaveManager : MonoBehaviour
     {
         for (int j = 0; j < wave.enemyPrefabs.Length; j++)
         {
-            for (int i = 0; i < wave.enemyPrefabs.Length; i++)
+            int count = (j < wave.enemyCountPerPrefab.Length) ? wave.enemyCountPerPrefab[j] : 1;
+            for (int i = 0; i < count; i++)
             {
                 Spawner spawner = zombieSpawners[Random.Range(0, zombieSpawners.Length)];
                 GameObject enemyPrefab = wave.enemyPrefabs[j];
@@ -118,10 +119,9 @@ public class WaveManager : MonoBehaviour
         }
     }
 
-
     void UpdateWaveText() {
         if (waveText) {
-            waveText.text = "Wave: " + (currentWaveIndex + 1).ToString() + " / " + waves.Length;
+            waveText.text = "Wave: " + (currentWaveIndex + 1) + " / " + waves.Length;
         }
     }
 
