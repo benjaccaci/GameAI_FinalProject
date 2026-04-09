@@ -7223,6 +7223,63 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1291821140}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &326055521
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 6996144551404341658, guid: b6824ae61b0424075ae623265b2337e2, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -3.030801
+      objectReference: {fileID: 0}
+    - target: {fileID: 6996144551404341658, guid: b6824ae61b0424075ae623265b2337e2, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.017752415
+      objectReference: {fileID: 0}
+    - target: {fileID: 6996144551404341658, guid: b6824ae61b0424075ae623265b2337e2, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 4.03806
+      objectReference: {fileID: 0}
+    - target: {fileID: 6996144551404341658, guid: b6824ae61b0424075ae623265b2337e2, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6996144551404341658, guid: b6824ae61b0424075ae623265b2337e2, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6996144551404341658, guid: b6824ae61b0424075ae623265b2337e2, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6996144551404341658, guid: b6824ae61b0424075ae623265b2337e2, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6996144551404341658, guid: b6824ae61b0424075ae623265b2337e2, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6996144551404341658, guid: b6824ae61b0424075ae623265b2337e2, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6996144551404341658, guid: b6824ae61b0424075ae623265b2337e2, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7664173058970473248, guid: b6824ae61b0424075ae623265b2337e2, type: 3}
+      propertyPath: m_Name
+      value: FastExplodingZombie
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: b6824ae61b0424075ae623265b2337e2, type: 3}
 --- !u!114 &333959534
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -53470,6 +53527,10 @@ PrefabInstance:
       propertyPath: bloodSplatterEffect
       value: 
       objectReference: {fileID: 862370254}
+    - target: {fileID: 4448619398445389955, guid: d967b2f9420054674a821f2b77e33f9d, type: 3}
+      propertyPath: mouseSensitivity
+      value: 50
+      objectReference: {fileID: 0}
     - target: {fileID: 5777398395788583581, guid: d967b2f9420054674a821f2b77e33f9d, type: 3}
       propertyPath: staminaSlider
       value: 
@@ -55260,3 +55321,4 @@ SceneRoots:
   - {fileID: 658755862}
   - {fileID: 1511399329}
   - {fileID: 1743548857}
+  - {fileID: 326055521}

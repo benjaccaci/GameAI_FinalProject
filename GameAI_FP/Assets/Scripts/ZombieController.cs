@@ -7,7 +7,7 @@ using Random = UnityEngine.Random;
 public class ZombieController : MonoBehaviour
 {
     [Header("Movement")]
-    public float moveSpeed = 3f;
+    float moveSpeed = 2f;
 
     [Header("Health")]
     public float maxHealth = 100f;
