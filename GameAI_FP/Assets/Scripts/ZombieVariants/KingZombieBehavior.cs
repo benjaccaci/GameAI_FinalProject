@@ -72,6 +72,16 @@ public class KingZombieBehavior : ZombieVariantBehavior
         }
     }
 
+    public override void OnInvestigating()
+    {
+        RefreshAloneStatus();
+    }
+
+    public override void OnSearching()
+    {
+        RefreshAloneStatus();
+    }
+
     public override void OnDeath()
     {
         Debug.Log("King zombie killed");
